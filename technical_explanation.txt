@@ -1,0 +1,26 @@
+# Technical Architecture & Infrastructure Explanation
+
+## 1. Frontend Technology Stack
+- **Framework**: React 19 (via Vite build tool) - chosen for its component-based architecture and fast development server/build times.
+- **Styling**: Tailwind CSS v4 - utilized for rapid, responsive UI development without maintaining massive CSS stylesheets.
+- **Routing**: `react-router-dom` - provides client-side routing, enabling a Single Page Application (SPA) experience with fast page transitions and route guards (protected routes).
+- **Data Visualization**: `recharts` - a composable charting library built on React components, used for the dashboard analytics.
+- **State & Networking**: Local state via React Hooks, global authentication state via Context API, and HTTP networking via `axios`.
+
+## 2. Backend Technology Stack
+- **Framework**: Strapi 5 - a Headless CMS built on Node.js and the Koa web framework. It provides out-of-the-box REST APIs, role-based access control, and an admin panel.
+- **Database**: SQLite (via `better-sqlite3`) - used as the primary relational database. It stores users, activity logs, and food logs. Strapi acts as the ORM, handling schema migrations and queries.
+- **Authentication**: JWT-based authentication handled by Strapi's `users-permissions` plugin.
+
+## 3. API & Routing Architecture
+- **Core Entity APIs**: Strapi automatically generates RESTful endpoints for core entities.
+  - `GET /api/food-logs` (Fetch user meals)
+  - `POST /api/activity-logs` (Log a workout)
+- **Custom AI Routes**: To integrate custom AI logic, custom routes and controllers were created:
+  - `POST /api/image-analysis/analyze`: Accepts `multipart/form-data` uploads. The Koa middleware parses the image, and the custom controller passes the Base64 data to the Gemini service.
+  - `GET /api/ai-coach/insight`: A custom REST endpoint that aggregates database metrics on the server-side before querying the Gemini AI for personalized tips.
+
+## 4. AI & External Services Integration
+- **SDK**: `@google/genai` (v1.38.0) is used on the server-side to communicate securely with Google's Gemini models.
+- **Security**: The `GEMINI_API_KEY` is kept exclusively on the backend environment variables. The frontend never communicates directly with the AI, preventing key exposure and API abuse.
+- **Data Flow**: Frontend -> Strapi Custom API -> Gemini API -> Strapi parsing/validation -> Frontend Response.

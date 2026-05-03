@@ -1,0 +1,31 @@
+# Fitness Tracker: Project & Feature Explanation
+
+## Project Overview
+Fitness Tracker is a comprehensive, full-stack health and wellness application designed to help users monitor their daily nutritional intake and physical activities. The application goes beyond standard tracking by integrating advanced AI capabilities to automate data entry and provide personalized health coaching.
+
+## Architecture
+The project follows a modern Client-Server architecture:
+- **Frontend (Client)**: A dynamic single-page application built with React, Vite, and Tailwind CSS. It handles the user interface, data visualization, and client-side routing.
+- **Backend (Server)**: A robust REST API powered by Strapi (a Node.js headless CMS). It manages the SQLite database, handles user authentication, and orchestrates the integration with Google's Gemini AI models.
+
+## Core Features
+
+### 1. User Authentication & Onboarding
+Users can securely register and log in. Upon first login, users go through an onboarding flow to set their fitness goals (e.g., maintain weight, lose weight), daily calorie intake targets, and daily burn targets.
+
+### 2. Interactive Dashboard
+A centralized hub for users to view their progress. It displays key metrics such as daily calories consumed vs. burned. It utilizes charts (via Recharts) to provide a visual representation of their weekly or monthly trends.
+
+### 3. Food Logging & AI Image Analysis
+Users can log their meals either manually by entering the food name and calories or via the AI-powered Image Upload feature. 
+- **Manual Entry**: Standard form to log meal type, food name, and calories.
+- **AI Image Analysis**: Users upload a photo of their meal. The app processes the image and automatically predicts the food name and estimates the calorie count.
+
+### 4. Activity Logging
+Users can log their physical activities, specifying the exercise name, duration, and calories burned. This data feeds directly into their daily caloric balance.
+
+### 5. AI Coach Insights
+An intelligent coaching feature that analyzes the user's past 7 days of eating habits and physical activities. It compares this data against their predefined goals and generates personalized, actionable tips to help them stay on track.
+
+### 6. Profile Management
+Users can update their personal information, adjust their fitness goals, and change their daily caloric targets at any time.

@@ -1,0 +1,230 @@
+FITTRACK INTERVIEW GUIDE
+========================
+
+1. PROJECT SUMMARY
+FitTrack is a full-stack fitness tracking application with:
+- A React + TypeScript + Vite frontend
+- A Strapi 5 + TypeScript backend
+- SQLite as the default database for local development
+- JWT-based authentication through Strapi users-permissions
+- Gemini-powered AI features for food image analysis and 7-day coaching insights
+
+
+2. TECH STACK
+Frontend
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS 4
+- React Router
+- Axios
+- Recharts
+- Lucide React
+- React Hot Toast
+
+Backend
+- Strapi 5
+- TypeScript
+- SQLite using better-sqlite3
+- Strapi users-permissions plugin
+- Google Gemini API via @google/genai
+
+
+3. HIGH-LEVEL ARCHITECTURE
+Frontend responsibilities
+- Handles login/signup UI
+- Stores JWT in localStorage
+- Fetches current user and domain data after login
+- Renders dashboard, onboarding, food logs, activity logs, profile
+- Calls custom backend AI endpoints
+
+Backend responsibilities
+- Authenticates users with JWT
+- Stores user profile data
+- Stores food and activity logs
+- Restricts records to the authenticated owner
+- Calls Gemini to generate AI responses
+
+
+4. USER FLOW
+Step 1: Authentication
+- A user signs up through Strapi local auth.
+- The frontend stores the returned JWT in localStorage.
+- The JWT is attached to future Axios requests through the Authorization header.
+
+Step 2: Session bootstrap
+- On app load, the frontend checks for an existing token.
+- If a token exists, it fetches:
+  - /api/users/me
+  - /api/food-logs
+  - /api/activity-logs
+- These values are stored in a global React context.
+
+Step 3: Onboarding
+- If the user has not completed age, weight, and goal fields, the app shows onboarding.
+- Onboarding captures:
+  - age
+  - weight
+  - optional height
+  - goal
+  - daily calorie intake target
+  - daily calorie burn target
+- That data is saved back to the Strapi user record.
+
+Step 4: Daily usage
+- The user adds food logs and activity logs.
+- The frontend updates local UI state immediately after a successful API call.
+- The dashboard computes daily summaries and a 7-day chart from the fetched logs.
+
+Step 5: AI features
+- AI Food Snap:
+  - User uploads a meal image
+  - Backend sends the image to Gemini
+  - Gemini returns food name + calories
+  - Frontend creates a real food log from that result
+
+- Agentic Health Coach:
+  - Dashboard calls /api/ai-coach/insight
+  - Backend fetches the last 7 days of the user's logs
+  - Backend builds a summarized prompt
+  - Gemini returns 3 short coaching tips
+  - Frontend displays those tips in a dedicated card
+
+
+5. CORE DATA MODELS
+User
+- username
+- email
+- age
+- weight
+- height
+- goal
+- dailyCalorieIntake
+- dailyCalorieBurn
+
+Food Log
+- name
+- mealType
+- calories
+- users_permissions_user relation
+
+Activity Log
+- name
+- duration
+- calories
+- users_permissions_user relation
+
+
+6. IMPORTANT API ENDPOINTS
+Auth
+- POST /api/auth/local/register
+- POST /api/auth/local
+- GET /api/users/me
+
+Food Logs
+- GET /api/food-logs
+- POST /api/food-logs
+- GET /api/food-logs/:documentId
+- PUT /api/food-logs/:documentId
+- DELETE /api/food-logs/:documentId
+
+Activity Logs
+- GET /api/activity-logs
+- POST /api/activity-logs
+- GET /api/activity-logs/:documentId
+- PUT /api/activity-logs/:documentId
+- DELETE /api/activity-logs/:documentId
+
+AI
+- POST /api/image-analysis
+- GET /api/ai-coach/insight
+
+
+7. HOW AUTHORIZATION WORKS
+- Strapi validates the JWT for authenticated routes.
+- In custom controllers, ctx.state.user contains the current user.
+- Food and activity queries are filtered by users_permissions_user = current user id.
+- Update and delete operations verify ownership before mutating data.
+
+
+8. HOW THE DASHBOARD WORKS
+The dashboard is mostly derived state.
+- It filters today's food logs from all food logs.
+- It filters today's activity logs from all activity logs.
+- It calculates:
+  - calories consumed today
+  - calories remaining
+  - calories burned today
+  - total active minutes
+  - activity count
+  - BMI if height exists
+- It also renders a 7-day bar chart using Recharts.
+
+
+9. HOW THE AI COACH WORKS
+Backend flow
+- The custom controller reads the authenticated user.
+- It fetches food and activity logs from the last 7 days.
+- It builds a compact summary string including:
+  - user goal
+  - daily targets
+  - food totals
+  - burn totals
+  - activity minutes
+  - line-by-line logs
+- That summary is sent to Gemini with a system instruction asking for 3 short, highly specific coaching insights.
+- The backend returns a JSON response:
+  - { "tips": ["...", "...", "..."] }
+
+Frontend flow
+- Dashboard fetches the endpoint once the user session is ready.
+- The card shows loading, error, empty, or success states.
+
+
+10. WHAT WAS DONE TO MAKE IT PRODUCTION-READY
+- Added owner checks for log update/delete paths
+- Added authenticated AI coach route
+- Reused Gemini through a shared backend service
+- Improved image analysis MIME handling
+- Removed frontend lint issues
+- Improved frontend error handling with a shared API error parser
+- Preserved JWT flow across all new API calls
+- Added dedicated interview documentation
+
+
+11. COMMON INTERVIEW QUESTIONS AND ANSWERS
+
+Q: Why did you choose Strapi for the backend?
+A: Strapi gives us authentication, content modeling, admin tooling, and extensible custom controllers quickly. That let us focus on product features like logging and AI rather than building CRUD and auth from scratch.
+
+Q: Why use React context here?
+A: The app has session-wide data like user, food logs, and activity logs that multiple pages need. Context keeps that state centralized and avoids prop drilling.
+
+Q: How do you secure user data?
+A: The backend reads ctx.state.user from the JWT, then filters food and activity data by the authenticated user's relation. Update and delete also verify ownership before making changes.
+
+Q: Why is the AI coach endpoint on the backend instead of the frontend?
+A: The backend owns secure access to user data and the Gemini API key. The frontend should never build raw prompts from privileged data or expose provider secrets.
+
+Q: How does the 7-day coach prompt stay relevant?
+A: The backend computes the last 7 days dynamically, summarizes totals and detailed logs, then asks Gemini for concise, goal-aware recommendations.
+
+Q: What are the tradeoffs of SQLite here?
+A: SQLite is excellent for local development and demos because setup is simple. For larger production scale, PostgreSQL would be the more typical upgrade path.
+
+Q: How does the app keep the UI responsive after log creation?
+A: After a successful POST, the frontend appends the created record into context state immediately, so the UI updates without waiting for a full re-fetch.
+
+Q: Why not call Gemini directly from the frontend?
+A: That would expose credentials and trust the browser with sensitive prompt construction. Routing through the backend is safer and easier to audit.
+
+Q: What is one example of a reliability improvement you made?
+A: I replaced loose error handling with a shared API error parser on the frontend and added authenticated ownership checks on destructive backend routes.
+
+Q: What would you improve next?
+A: I would add automated tests, stronger request validation, rate limiting on AI endpoints, and move from SQLite to PostgreSQL for production deployments.
+
+
+12. TALK TRACK FOR DEMO
+You can say:
+"This app starts with Strapi auth, loads the user's profile and logs into React context, gates incomplete users into onboarding, and then uses those logs to power the dashboard. The newest feature is the Agentic Health Coach, where the backend summarizes the user's last 7 days and asks Gemini for three short, actionable coaching tips. I kept AI on the backend so the API key and prompt construction remain secure."

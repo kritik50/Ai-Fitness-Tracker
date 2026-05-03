@@ -1,0 +1,48 @@
+LOCAL SETUP AFTER DATABASE RESET
+================================
+
+What was done
+- Deleted the old local Strapi SQLite database at `server\.tmp\data.db`
+- This removes your friend's local admin account, local app users, and test data
+
+What to do next
+1. Start the backend
+   - `cd server`
+   - `npm run dev`
+
+2. Open Strapi admin
+   - `http://localhost:1337/admin`
+   - You should now see the first-time Strapi admin creation screen
+   - Create your own admin account
+
+3. Configure API permissions in Strapi admin
+   - Settings
+   - Users & Permissions Plugin
+   - Roles
+   - Authenticated
+
+Enable these permissions:
+- `food-log`: `find`, `findOne`, `create`, `update`, `delete`
+- `activity-log`: `find`, `findOne`, `create`, `update`, `delete`
+- `ai-coach`: `insight`
+- `image-analysis`: `analyze`
+
+4. Enable app signup if needed
+   - Settings
+   - Users & Permissions Plugin
+   - Advanced Settings
+   - Enable registration
+
+5. Start the frontend
+   - `cd client`
+   - `npm run dev`
+
+6. Use the app
+   - Open `http://localhost:5173`
+   - Sign up as a normal app user
+   - Complete onboarding
+   - Then use the dashboard
+
+Important
+- `http://localhost:1337/admin` is Strapi admin
+- `http://localhost:5173` is the fitness app

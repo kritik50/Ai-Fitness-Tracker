@@ -1,0 +1,60 @@
+# Project Terminology Glossary (AI & Technical)
+
+This document lists and explains the key AI and technical terms used in the Fitness Tracker project. It is specifically designed to prepare you for questions from a CEO, CTO, or an AI Engineering Interviewer.
+
+---
+
+## Part 1: Artificial Intelligence (AI) Terms
+
+These are the core AI concepts you implemented using Google's Gemini API.
+
+**1. Generative AI (GenAI)**
+*Explanation*: A subset of AI that can generate new content (text, images, code) based on patterns it has learned. In this project, GenAI is used to generate personalized coaching tips and infer nutritional data from images.
+
+**2. LLM (Large Language Model)**
+*Explanation*: A highly advanced neural network (like Gemini 2.5 Flash) trained on massive amounts of data. It understands context, human language, and can perform logic-based tasks like calculating summarized fitness data to provide advice.
+
+**3. Multimodal AI / Vision AI**
+*Explanation*: "Multimodal" means the AI can understand and process more than one type of data format (mode). In your food logging feature, the Gemini model processes both **Images** (the food photo) and **Text** (the prompt asking to extract calories). 
+
+**4. Prompt Engineering**
+*Explanation*: The strategic practice of designing the text input provided to an AI model to get the most accurate and useful output. In your AI Coach, you engineered a prompt that dynamically injects the user's specific goals, 7-day calorie sums, and activity durations to give the AI maximum context.
+
+**5. System Instructions (System Prompting)**
+*Explanation*: A foundational rule set given to the AI before the main prompt. In your code, you set the `systemInstruction` to "Act as a fitness coach." This strictly bounds the AI's behavior, ensuring it responds with the persona and constraints of a professional trainer rather than a generic chatbot.
+
+**6. Structured Output / JSON Schema Enforcement**
+*Explanation*: LLMs naturally output conversational text. However, for a software backend to use AI data, it needs predictable code. By passing a `responseSchema`, you forced the AI to output strict JSON (e.g., `{ "name": "Apple", "calories": 95 }`). *CEO Context*: This is critical for application stability; it prevents the app from crashing due to unexpected AI responses.
+
+**7. Temperature Parameter**
+*Explanation*: A setting in the AI API that controls "creativity" or randomness. You set the temperature to a low value (`0.4`) for the AI Coach. This means the AI will give highly deterministic, logical, and focused fitness tips, rather than hallucinating or being overly creative, which is dangerous in a health app.
+
+**8. Base64 Image Encoding**
+*Explanation*: To send an image to the Gemini API via a standard HTTP request, the binary image file from the user must be converted into a long string of text. This text representation of an image is called Base64.
+
+---
+
+## Part 2: Technical & Architectural Terms
+
+These terms describe the structural and software engineering side of your project.
+
+**1. Client-Server Architecture**
+The decoupling of your application into two separate entities. The "Client" (React frontend) handles the UI and user experience, while the "Server" (Strapi backend) handles data processing, AI communication, and database storage. 
+
+**2. Headless CMS (Content Management System)**
+Strapi operates as a "headless" CMS. This means it provides a robust backend (database, user management, and APIs) but has no presentation layer (the "head"). The React app acts as the custom head.
+
+**3. RESTful API (Representational State Transfer)**
+The standardized way your React app communicates with Strapi. You use standard HTTP methods like GET (to fetch logs) and POST (to send an image or save a log).
+
+**4. SPA (Single Page Application)**
+Your Vite/React frontend. Instead of the browser loading entirely new HTML pages when navigating from the Dashboard to the Profile, JavaScript dynamically rewrites the current page, making the app feel as fast as a native mobile app.
+
+**5. JWT (JSON Web Token) Authentication**
+The secure method used for logging users in. When a user authenticates, Strapi gives them a JWT. The React app stores this token and sends it with every future API request to prove the user's identity.
+
+**6. ORM (Object-Relational Mapping) / Document Service**
+Instead of writing raw SQL commands (like `SELECT * FROM food_logs`), you use Strapi's built-in ORM. It allows you to query the database using standard JavaScript objects and arrays, which is safer and faster to develop.
+
+**7. Component-Based UI / Prop Drilling**
+React's architectural style where the UI is broken down into reusable pieces (Components). Prop drilling refers to passing data down through multiple layers of components, which you likely mitigated by using React Context or similar state management tools.

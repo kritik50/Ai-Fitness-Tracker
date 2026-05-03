@@ -1,0 +1,39 @@
+# Interview Preparation: 30 Possible Questions
+
+## React & Frontend
+1. Why did you choose Vite over Create React App or Next.js for this project?
+2. How do you handle global state and authentication in your React application?
+3. Can you explain how React 19's features might differ from previous versions you've used?
+4. How do you manage route protection for authenticated users using `react-router-dom`?
+5. What are the benefits of using Tailwind CSS, and how do you organize your styling?
+6. How did you implement data visualization with Recharts? What were the challenges?
+7. Explain how Axios interceptors work and why you might use them for JWT tokens.
+8. How do you optimize the performance of the React dashboard with multiple charts and data streams?
+
+## Backend & Strapi
+9. Why did you choose Strapi as your backend instead of building a custom Express or NestJS app?
+10. Explain how Strapi handles the database layer (ORM) and why you used SQLite.
+11. How do you implement custom business logic and routes in a Strapi application?
+12. Can you explain the difference between a Controller and a Service in your Strapi architecture?
+13. How does Strapi handle user authentication and authorization (Role-Based Access Control)?
+14. How do you handle file uploads in Node.js/Koa, specifically for the image analysis feature?
+15. If the application scales, how would you migrate from SQLite to PostgreSQL in Strapi?
+
+## AI & Prompt Engineering
+16. Why did you choose Google's Gemini 2.5 Flash model over OpenAI's GPT-4o or Claude 3?
+17. Explain how you convert user images to a format the Gemini model can process (Base64 vs. direct upload).
+18. What is Structured Output in LLMs, and how did you enforce JSON responses in your `@google/genai` implementation?
+19. How did you prevent the AI from hallucinating or providing generic advice in the AI Coach feature?
+20. Explain the role of the `systemInstruction` and `temperature` parameters in your Gemini API calls.
+21. If the AI API fails or times out, how does your backend handle the error gracefully?
+22. How do you construct dynamic prompts? How do you handle token limits if a user has hundreds of logs?
+23. Describe a challenge you faced with prompt engineering for the food image recognition and how you solved it.
+
+## System Design & Architecture
+24. Explain the full data flow when a user uploads a food image, from the React component to the database.
+25. Why is it a security risk to call the Gemini API directly from the React frontend?
+26. How would you design a caching layer (e.g., Redis) to reduce Gemini API costs for the AI Coach insights?
+27. If this app went viral, what are the primary bottlenecks in your current architecture?
+28. How would you implement background processing or webhooks for long-running AI tasks?
+29. Describe your approach to testing this application (unit vs. integration testing).
+30. How would you implement real-time features (like live step counting) into this architecture in the future?

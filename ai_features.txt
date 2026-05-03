@@ -1,0 +1,25 @@
+# AI Features & Integration Details
+
+## Overview
+The application leverages Google's Gemini AI (specifically the `gemini-2.5-flash` model) to transform a standard fitness tracker into an intelligent health companion. The AI integration is handled on the backend via the `@google/genai` SDK, ensuring API keys remain secure.
+
+## 1. AI Food Image Analysis
+**Purpose**: To reduce the friction of manual food logging by automatically identifying food and estimating calories from a user-uploaded image.
+
+**How it works**:
+- The user uploads an image from the React frontend.
+- The Strapi backend receives the file and reads it into a Base64 encoded string.
+- The `analyzeFoodImage` service sends the Base64 image data and MIME type to the Gemini model using the `generateContent` method.
+- **Prompt Engineering**: The model is prompted with: "Extract the food name and estimated calories from this image in a JSON object."
+- **Structured Output**: To ensure the frontend can reliably parse the response, the backend uses `responseSchema` to enforce a strict JSON output format requiring exactly two properties: `name` (string) and `calories` (number).
+
+## 2. AI Health Coach Insights
+**Purpose**: To provide personalized, data-driven advice based on the user's recent behavior, acting as a virtual personal trainer.
+
+**How it works**:
+- When the user requests insights, the backend queries the database for the user's food logs and activity logs from the past 7 days.
+- The backend aggregates this data, calculating total calories consumed, total calories burned, and total activity duration.
+- **Prompt Construction**: A dynamic prompt is generated that includes the user's goal (e.g., "lose weight"), daily targets, and the 7-day aggregated summaries. The raw food and activity logs are also appended as context.
+- **System Instructions**: The Gemini model is configured with a `systemInstruction` telling it to "Act as a fitness coach" and provide "3 short, highly specific insights or tips".
+- **Structured Output & Determinism**: The temperature is set to a low value (0.4) for more deterministic and focused responses. A `coachInsightsSchema` is provided to force the model to return exactly an array of 3 string tips within a JSON object.
+- The backend parses the JSON and sends the cleaned array of tips to the frontend for display.

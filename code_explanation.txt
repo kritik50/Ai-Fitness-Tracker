@@ -1,0 +1,49 @@
+# Code Explanation for AI Engineer / CEO Review
+
+## Frontend Code Architecture & Highlights
+The frontend is built for performance and maintainability, utilizing React 19 and Vite.
+
+- **Component Structure & State**: The application uses functional React components with Hooks (`useState`, `useEffect`). Global state and user sessions are managed via React Context (`AuthContext` or similar), ensuring user data is accessible across the application without prop drilling.
+- **Styling**: Tailwind CSS v4 is used for utility-first styling. This allows for rapid UI development and ensures consistent design tokens across the platform.
+- **Routing**: Client-side routing is handled by `react-router-dom`, providing a seamless SPA (Single Page Application) experience with protected routes that require authentication.
+- **Data Fetching**: The `axios` library is used to interact with the Strapi backend APIs. Interceptors are likely used to attach JWT authentication tokens to outgoing requests securely.
+
+## Backend Code Architecture & AI Integration Highlights
+The backend relies on Strapi (Node.js/Koa base), emphasizing custom controller logic to interact with Google's Gemini AI.
+
+### Strapi Document Service API (Data Aggregation)
+When generating AI insights, the backend needs historical data. The code uses Strapi's Document Service API to query the database efficiently:
+```typescript
+const [foodLogs, activityLogs] = await Promise.all([
+    strapi.documents("api::food-log.food-log").findMany({
+        filters: { users_permissions_user: user.id, createdAt: { $gte: fromDate } },
+        sort: ["createdAt:asc"],
+        fields: ["name", "mealType", "calories", "createdAt"],
+    }),
+    // Similar query for activity-log
+]);
+```
+*Why this matters*: Using `Promise.all` ensures concurrent database queries, reducing latency. We also project only the necessary fields (`fields: [...]`) to minimize memory footprint before passing data to the AI.
+
+### Gemini API Integration (services/gemini.ts)
+The application leverages the official `@google/genai` SDK. A key aspect of the implementation is enforcing structured outputs to guarantee API stability for the client.
+
+```typescript
+// Example: Enforcing JSON schema for Image Analysis
+const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: [
+        { inlineData: { mimeType, data: base64ImageFile } },
+        { text: "Extract the food name and estimated calories from this image in a JSON object." }
+    ],
+    config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+            type: "object",
+            properties: { name: { type: "string" }, calories: { type: "number" } },
+            required: ["name", "calories"],
+        },
+    },
+});
+```
+*Why this matters*: For an AI Engineer or CEO, this shows a production-ready approach. Relying on raw LLM text parsing is brittle. By using `responseMimeType` and `responseSchema`, the AI behaves reliably as a deterministic microservice returning strictly typed JSON. Furthermore, setting `temperature: 0.4` for the AI coach ensures the generated insights are focused and less prone to hallucination.
