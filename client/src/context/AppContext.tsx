@@ -71,18 +71,24 @@ export const AppProvider = ({children} : {children: React.ReactNode})=>{
             return true;
         } catch (error: unknown) {
             console.log(error);
+            clearSession();
 
             if (axios.isAxiosError(error) && error.response?.status === 401) {
-                clearSession();
+                // Token expired or invalid — silently clear, show Login
                 return false;
             }
 
-            toast.error(getApiErrorMessage(error))
+            // Network error, timeout, or other — clear session and show Login
+            // Only toast if it's not a connection error (server might just be starting)
+            if (axios.isAxiosError(error) && error.code !== 'ECONNREFUSED' && error.code !== 'ERR_NETWORK') {
+                toast.error(getApiErrorMessage(error))
+            }
             return false;
         } finally {
             setIsUserFetched(true);
         }
     }, [clearSession])
+
 
     const fetchFoodLogs = useCallback(async (token: string)=>{
         try {

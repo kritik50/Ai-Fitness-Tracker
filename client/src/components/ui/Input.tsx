@@ -13,6 +13,21 @@ interface InputProps {
 }
 
 export default function Input({ label, type = 'text', value, onChange, placeholder = '', className = '', required = false, min, max }: InputProps) {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (type === 'number') {
+            const raw = e.target.value;
+            // If field is cleared, pass 0 to avoid NaN in state
+            if (raw === '' || raw === '-') {
+                onChange(0);
+            } else {
+                const parsed = parseFloat(raw);
+                onChange(isNaN(parsed) ? 0 : parsed);
+            }
+        } else {
+            onChange(e.target.value);
+        }
+    };
+
     return (
         <div className={`space-y-2 ${className}`}>
             {label && (
@@ -24,7 +39,7 @@ export default function Input({ label, type = 'text', value, onChange, placehold
             <input
                 type={type}
                 value={value}
-                onChange={(e) => onChange(type === 'number' ? parseFloat(e.target.value) : e.target.value)}
+                onChange={handleChange}
                 placeholder={placeholder}
                 min={min}
                 max={max}

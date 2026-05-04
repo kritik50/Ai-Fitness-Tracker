@@ -8,9 +8,10 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:1337',
+        target: process.env.VITE_STRAPI_API_URL || 'http://localhost:1338',
         changeOrigin: true,
         secure: false,
+        rewrite: (path) => path, // Keep /api prefix
       }
     }
   }
