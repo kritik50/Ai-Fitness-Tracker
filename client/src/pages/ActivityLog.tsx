@@ -9,7 +9,7 @@ import Button from "../components/ui/Button";
 import toast from "react-hot-toast";
 import api from "../configs/api";
 import { getApiErrorMessage } from "../utils/api";
-import "../Pages/ActivityLog.css"
+import "../pages/ActivityLog.css"
 
 const ActivityLog = () => {
 
