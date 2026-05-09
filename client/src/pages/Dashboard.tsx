@@ -1,344 +1,362 @@
 import { useEffect, useState } from "react"
+import {
+  Activity, ScaleIcon, SparklesIcon,
+  TrendingUpIcon, ZapIcon, Flame, UtensilsCrossed
+} from "lucide-react"
+
 import { getMotivationalMessage } from "../assets/assets"
 import { useAppContext } from "../context/useAppContext"
 import type { ActivityEntry, FoodEntry } from "../types"
-import Card from "../components/ui/Card"
-import ProgressBar from "../components/ui/ProgressBar"
-import { Activity, FlameIcon, HamburgerIcon, Loader2Icon, Ruler, ScaleIcon, SparklesIcon, TrendingUpIcon, ZapIcon } from "lucide-react"
 import CaloriesChart from "../components/CaloriesChart"
 import api from "../configs/api"
 import { getApiErrorMessage } from "../utils/api"
-
+import "../pages/Dashboard.css"
 
 const Dashboard = () => {
-
-  const {user, allActivityLogs, allFoodLogs} = useAppContext()
-  const [coachTips, setCoachTips] = useState<string[]>([])
+  const { user, allActivityLogs, allFoodLogs } = useAppContext()
+  const [coachTips, setCoachTips]       = useState<string[]>([])
   const [coachLoading, setCoachLoading] = useState(false)
-  const [coachError, setCoachError] = useState("")
+  const [coachError, setCoachError]     = useState("")
 
-  const DAILY_CALORIE_LIMIT: number = user?.dailyCalorieIntake || 2000;
-  const today = new Date().toISOString().split('T')[0];
-  const todayFood = allFoodLogs.filter((entry: FoodEntry) => entry.createdAt?.split('T')[0] === today)
+  const DAILY_CALORIE_LIMIT: number = user?.dailyCalorieIntake || 2000
+  const today = new Date().toISOString().split('T')[0]
+  const todayFood       = allFoodLogs.filter((entry: FoodEntry)     => entry.createdAt?.split('T')[0] === today)
   const todayActivities = allActivityLogs.filter((entry: ActivityEntry) => entry.createdAt?.split('T')[0] === today)
+
+  // Get dynamic greeting based on current time
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) {
+      return { text: 'Good morning', emoji: '🌅' }
+    } else if (hour < 17) {
+      return { text: 'Good afternoon', emoji: '☀️' }
+    } else {
+      return { text: 'Good evening', emoji: '🌙' }
+    }
+  }
+
+  const greeting = getGreeting()
 
   useEffect(() => {
     if (!user?.token) {
-      setCoachTips([]);
-      setCoachError("");
-      return;
+      setCoachTips([])
+      setCoachError("")
+      return
     }
 
-    let isMounted = true;
+    let isMounted = true
 
     const fetchCoachInsights = async () => {
-      setCoachLoading(true);
-      setCoachError("");
+      setCoachLoading(true)
+      setCoachError("")
 
       try {
-        const { data } = await api.get<{ tips: string[] }>("/api/ai-coach/insight");
-
-        if (!isMounted) {
-          return;
-        }
-
-        setCoachTips(Array.isArray(data.tips) ? data.tips.slice(0, 3) : []);
+        const { data } = await api.get<{ tips: string[] }>("/api/ai-coach/insight")
+        if (!isMounted) return
+        setCoachTips(Array.isArray(data.tips) ? data.tips.slice(0, 3) : [])
       } catch (error: unknown) {
-        console.log(error);
-
-        if (!isMounted) {
-          return;
-        }
-
-        setCoachTips([]);
-        setCoachError(getApiErrorMessage(error, "Unable to load coach insights right now."));
+        console.log(error)
+        if (!isMounted) return
+        setCoachTips([])
+        setCoachError(getApiErrorMessage(error, "Unable to load coach insights right now."))
       } finally {
-        if (isMounted) {
-          setCoachLoading(false);
-        }
+        if (isMounted) setCoachLoading(false)
       }
-    };
+    }
 
-    void fetchCoachInsights();
-
-    return () => {
-      isMounted = false;
-    };
+    void fetchCoachInsights()
+    return () => { isMounted = false }
   }, [user?.token, allFoodLogs.length, allActivityLogs.length])
 
-  const totalCalories: number = todayFood.reduce((sum, item)=> sum + item.calories, 0)
-
-  const remainingCalories: number = DAILY_CALORIE_LIMIT - totalCalories;
-
-  const totalActiveMinutes: number = todayActivities.reduce((sum, item)=> sum + item.duration, 0)
-
-  const totalBurned: number = todayActivities.reduce((sum, item)=> sum + (item.calories || 0), 0)
+  const totalCalories: number     = todayFood.reduce((sum, item) => sum + item.calories, 0)
+  const remainingCalories: number = DAILY_CALORIE_LIMIT - totalCalories
+  const totalActiveMinutes: number = todayActivities.reduce((sum, item) => sum + item.duration, 0)
+  const totalBurned: number       = todayActivities.reduce((sum, item) => sum + (item.calories || 0), 0)
 
   const motivation = getMotivationalMessage(totalCalories, totalActiveMinutes, DAILY_CALORIE_LIMIT)
 
+  const caloriesPct = Math.min((totalCalories / DAILY_CALORIE_LIMIT) * 100, 100)
+  const burnedPct   = Math.min((totalBurned / (user?.dailyCalorieBurn || 400)) * 100, 100)
+
   return (
-    <div className="page-container">
-      {/* Header */}
-      <div className="dashboard-header">
-        <p className='text-emerald-100 text-sm font-medium'>Welcome back</p>
-        <h1 className="text-2xl font-bold mt-1">{`Hi there! 👋 ${user?.username}`}</h1>
+    <div className="dashboard">
+      <div className="dashboard-inner">
 
-        {/* Motivation Card */}
-        <div className="mt-6 bg-white/20 backdrop-blur-sm rounded-2xl p-4">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">{motivation.emoji}</span>
-            <p className="text-white font-medium">{motivation.text}</p>
+        {/* ── Header ── */}
+        <header className="dash-header">
+          <p className="dash-eyebrow">Overview Dashboard</p>
+          <h1 className="dash-title">{greeting.text}, {user?.username} {greeting.emoji}</h1>
+
+          <div className="motivation-badge">
+            <div className="motivation-emoji-wrap">
+              <span>{motivation.emoji}</span>
+            </div>
+            <p className="motivation-text">{motivation.text}</p>
           </div>
-        </div>
+        </header>
 
-      </div>
+        {/* ── Grid ── */}
+        <div className="dash-grid">
 
-      {/* Main Content */}
-      <div className="dashboard-grid">
-        {/* Calories Card */}
-        <Card className="shadow-lg col-span-2">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center">
-                <HamburgerIcon className='w-6 h-6 text-orange-500'/>
+          {/* ─────────────────────────────
+              CALORIES CARD (col-span-6)
+          ───────────────────────────── */}
+          <div className="col-6">
+            <div className="dash-card calories-card" style={{ height: '100%' }}>
+
+              {/* Consumed section */}
+              <div className="cal-section">
+                <div className="cal-meta">
+                  <div className="icon-badge icon-badge--orange">
+                    <UtensilsCrossed />
+                  </div>
+                  <span className="card-label">Consumed</span>
+                </div>
+
+                <div className="cal-row">
+                  <div className="cal-number-row">
+                    <span className="card-value">{totalCalories}</span>
+                    <span className="card-value-unit">/ {DAILY_CALORIE_LIMIT} kcal</span>
+                  </div>
+                  <span className={`status-pill ${remainingCalories >= 0 ? 'status-pill--green' : 'status-pill--rose'}`}>
+                    {remainingCalories >= 0
+                      ? `${remainingCalories} left`
+                      : `${Math.abs(remainingCalories)} over`}
+                  </span>
+                </div>
+
+                <div className="progress-track">
+                  <div
+                    className="progress-fill progress-fill--orange"
+                    style={{ width: `${caloriesPct}%` }}
+                  />
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Calories Consumed</p>
-                <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalCalories}</p>
-              </div>
 
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-slate-500 dark:text-slate-400">Limit</p>
-              <p className="text-2xl font-bold text-slate-800 dark:text-white">{DAILY_CALORIE_LIMIT}</p>
+              <div className="card-divider" />
+
+              {/* Burned section */}
+              <div className="cal-section">
+                <div className="cal-meta">
+                  <div className="icon-badge icon-badge--rose">
+                    <Flame />
+                  </div>
+                  <span className="card-label">Burned</span>
+                </div>
+
+                <div className="cal-number-row" style={{ marginBottom: 14 }}>
+                  <span className="card-value">{totalBurned}</span>
+                  <span className="card-value-unit">/ {user?.dailyCalorieBurn || 400} kcal</span>
+                </div>
+
+                <div className="progress-track">
+                  <div
+                    className="progress-fill progress-fill--rose"
+                    style={{ width: `${burnedPct}%` }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-          <ProgressBar value={totalCalories} max={DAILY_CALORIE_LIMIT}/>
 
-          <div className="mt-4 flex justify-between items-center">
-            <div className={`px-3 py-1.5 rounded-lg ${remainingCalories >= 0 ? 'bg-emerald-50 dark:bg-emerald-900/10 text-emerald-700 dark:text-emerald-400' : 'bg-red-50 dark:bg-red-900/10 text-red-700 dark:text-red-400'}`}>
-              <span className="text-sm font-medium">
-                {remainingCalories >= 0 ? `${remainingCalories} kcal remaining` : `${Math.abs(remainingCalories)} kcal over`}
-              </span>
-            </div>
+          {/* ─────────────────────────────
+              STAT CARDS (Active + Workouts)
+          ───────────────────────────── */}
+          <div className="stat-cards-col">
 
-            <span className="text-sm text-slate-400">{Math.round((totalCalories / DAILY_CALORIE_LIMIT) * 100)}%</span>
-          </div>
-
-          <div className="border-t border-slate-100 dark:border-slate-800 my-4"></div>
-
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center">
-                <FlameIcon className='w-6 h-6 text-orange-500'/>
-              </div>
-              <div>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Calories Burned</p>
-                <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalBurned}</p>
-              </div>
-
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-slate-500 dark:text-slate-400">Goal</p>
-              <p className="text-2xl font-bold text-slate-800 dark:text-white">{user?.dailyCalorieBurn || 400}</p>
-            </div>
-          </div>
-          <ProgressBar value={totalBurned} max={user?.dailyCalorieBurn || 400}/>
-        </Card>
-
-        {/* Stats Row */}
-        <div className="dashboard-card-grid">
-          {/* Active Minutes */}
-          <Card>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                <Activity className='w-5 h-5 text-blue-500'/>
-              </div>
-              <p className="text-sm text-slate-500">Active</p>
-            </div>
-            <p className="text-2xl font-bold text-slate-800 dark:text-white">{totalActiveMinutes}</p>
-            <p className="text-sm text-slate-400">minutes today</p>
-          </Card>
-
-          {/* Activities Count */}
-          <Card>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                <ZapIcon className='w-5 h-5 text-purple-500'/>
-              </div>
-              <p className="text-sm text-slate-500">Workouts</p>
-            </div>
-            <p className="text-2xl font-bold text-slate-800 dark:text-white">{todayActivities.length}</p>
-            <p className="text-sm text-slate-400">activities logged</p>
-          </Card>
-        </div>
-
-         {/* Goal Card */}
-         {user && ( // This card will span both columns on large screens
-          <Card className="bg-linear-to-r from-slate-800 to-slate-700">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-                <TrendingUpIcon className='w-6 h-6 text-emerald-400'/>
-              </div>
-              <div>
-                <p className="text-slate-400 text-sm">Your Goal</p>
-                <p className="text-white font-semibold capitalize">
-                  {user.goal === 'lose' && '🔥 Lose Weight'}
-                  {user.goal === 'maintain' && '⚖️ Maintain Weight'}
-                  {user.goal === 'gain' && '💪 Gain Muscle'}
-                </p>
-              </div>
-            </div>
-          </Card>
-         )}
-
-          {/* Body Metrics Card */}
-          {user && user.weight && (
-            <Card>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center">
-                  <ScaleIcon className='w-6 h-6 text-indigo-500'/>
+            {/* Active Minutes */}
+            <div className="dash-card stat-card">
+              <div className="stat-card-inner">
+                <div className="icon-badge icon-badge--blue">
+                  <Activity />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-white">Body Metrics</h3>
-                  <p className="text-slate-500 text-sm">Your stats</p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
-                      <ScaleIcon className='w-4 h-4 text-slate-500' />
-                    </div>
-                    <span className="text-sm text-slate-500 dark:text-slate-400">Weight</span>
+                  <p className="card-label" style={{ marginBottom: 6 }}>Active Time</p>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                    <span className="card-value">{totalActiveMinutes}</span>
+                    <span className="card-value-unit">min</span>
                   </div>
-                  <span className="font-semibold text-slate-700 dark:text-slate-200">{user.weight} kg</span>
                 </div>
-
-                {user.height && (
-                  <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
-                      <Ruler className='w-4 h-4 text-slate-500' />
-                    </div>
-                    <span className="text-sm text-slate-500 dark:text-slate-400">Height</span>
-                  </div>
-                  <span className="font-semibold text-slate-700 dark:text-slate-200">{user.height} cm</span>
-                </div>
-                )}
-
-                {user.height && (
-                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">BMI</span>
-                      {(()=>{
-                        const bmi = (user.weight / Math.pow(user.height / 100, 2)).toFixed(1);
-                        const getStatus = (b: number)=>{
-                          if(b < 18.5) return {
-                            color: 'text-blue-500',
-                            bg: 'bg-blue-500' };
-                          if(b < 25) return {
-                            color: 'text-emerald-500', 
-                            bg: 'bg-emerald-500'
-                          };
-                          if(b < 30) return {
-                            color: 'text-orange-500', 
-                            bg: 'bg-orange-500'
-                          };
-
-                          return {
-                            color: 'text-red-500', 
-                            bg: 'bg-red-500'
-                          };
-                        }
-                        const status = getStatus(Number(bmi));
-                        return <span className={`text-lg font-bold ${status.color}`}>{bmi}</span>
-                      })()}
-                    </div>
-
-                     {/* BMI Scale Visual */}
-                     <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex">
-                      <div className="flex-1 bg-blue-400 opacity-30"></div>
-                      <div className="flex-1 bg-emerald-400 opacity-30"></div>
-                      <div className="flex-1 bg-orange-400 opacity-30"></div>
-                      <div className="flex-1 bg-red-400 opacity-30"></div>
-                     </div>
-                     <div className="flex justify-between mt-1 text-[10px] text-slate-400">
-                      <span>18.5</span>
-                      <span>25</span>
-                      <span>30</span>
-                     </div>
-                  </div>
-                )}
-              </div>
-            </Card>
-          )}
-
-           {/* Quick Summary */}
-           <Card>
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Today's Summary</h3>
-
-            <div className="space-y-3">
-              <div className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800">
-                <span className="text-slate-500 dark:text-slate-400">Meals logged</span>
-                <span className="font-medium text-slate-700 dark:text-slate-200">{todayFood.length}</span>
-              </div>
-              <div className="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800">
-                <span className="text-slate-500 dark:text-slate-400">Total calories</span>
-                <span className="font-medium text-slate-700 dark:text-slate-200">{totalCalories} kcal</span>
-              </div>
-              <div className="flex justify-between items-center py-2">
-                <span className="text-slate-500 dark:text-slate-400">Active time</span>
-                <span className="font-medium text-slate-700 dark:text-slate-200">{totalActiveMinutes} min</span>
-              </div>
-
-            </div>
-           </Card>
-
-           <Card>
-            <div className="flex items-start gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                <SparklesIcon className='w-6 h-6 text-emerald-600'/>
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-800 dark:text-white">Agentic Health Coach</h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Personalized insights based on your last 7 days.</p>
               </div>
             </div>
 
-            {coachLoading ? (
-              <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
-                <Loader2Icon className="size-5 animate-spin" />
-                <span className="text-sm">Analyzing your progress...</span>
+            {/* Workouts */}
+            <div className="dash-card stat-card" style={{ animationDelay: '0.28s' }}>
+              <div className="stat-card-inner">
+                <div className="icon-badge icon-badge--violet">
+                  <ZapIcon />
+                </div>
+                <div>
+                  <p className="card-label" style={{ marginBottom: 6 }}>Workouts</p>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                    <span className="card-value">{todayActivities.length}</span>
+                    <span className="card-value-unit">sessions</span>
+                  </div>
+                </div>
               </div>
-            ) : coachError ? (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-300">
-                {coachError}
-              </div>
-            ) : coachTips.length === 0 ? (
-              <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-800/50 dark:text-slate-300">
-                Add a few meals and activities to unlock coach guidance.
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {coachTips.map((tip, index) => (
-                  <div key={tip} className="rounded-xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 dark:border-emerald-900/30 dark:bg-emerald-950/20">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-300">
-                      Tip {index + 1}
+            </div>
+          </div>
+
+          {/* ─────────────────────────────
+              RIGHT COLUMN — BODY METRICS
+          ───────────────────────────── */}
+          <div className="metrics-col">
+
+            {/* Goal card */}
+            {user && (
+              <div className="dash-card goal-card">
+                <div className="goal-card-inner">
+                  <div className="icon-badge icon-badge--teal">
+                    <TrendingUpIcon />
+                  </div>
+                  <div className="goal-text-wrap">
+                    <p className="card-label" style={{ marginBottom: 4 }}>Current Goal</p>
+                    <p className="goal-value">
+                      {user.goal === 'lose'     && 'Lose Weight'}
+                      {user.goal === 'maintain' && 'Maintain Weight'}
+                      {user.goal === 'gain'     && 'Gain Muscle'}
                     </p>
-                    <p className="mt-1 text-sm text-slate-700 dark:text-slate-200">{tip}</p>
                   </div>
-                ))}
+                </div>
               </div>
             )}
-           </Card>
 
-           {/* Activity & Intake Graph */}
-           <Card className="col-span-2">
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-2">This Week's Progress</h3>
-            <CaloriesChart />
-           </Card>
+            {/* Body metrics card */}
+            {user && user.weight && (
+              <div className="dash-card body-card">
+                <div className="body-card-inner">
+                  <div className="body-card-header">
+                    <div className="icon-badge icon-badge--indigo">
+                      <ScaleIcon />
+                    </div>
+                    <h3 className="body-card-title">Body Metrics</h3>
+                  </div>
+
+                  <div className="metric-row">
+                    <span className="metric-label">Weight</span>
+                    <span className="metric-value">{user.weight} kg</span>
+                  </div>
+
+                  {user.height && (
+                    <div className="metric-row">
+                      <span className="metric-label">Height</span>
+                      <span className="metric-value">{user.height} cm</span>
+                    </div>
+                  )}
+
+                  {user.height && (() => {
+                    const bmi = (user.weight / Math.pow(user.height / 100, 2)).toFixed(1)
+                    const bmiColor = (b: number) => {
+                      if (b < 18.5) return '#60a5fa'
+                      if (b < 25)   return '#4ade80'
+                      if (b < 30)   return '#fb923c'
+                      return '#fb7185'
+                    }
+                    return (
+                      <div className="bmi-wrap">
+                        <div className="bmi-header">
+                          <span className="card-label">BMI Score</span>
+                          <span className="bmi-score" style={{ color: bmiColor(Number(bmi)) }}>
+                            {bmi}
+                          </span>
+                        </div>
+                        <div className="bmi-bar">
+                          <div className="bmi-seg" style={{ background: '#60a5fa' }} />
+                          <div className="bmi-seg" style={{ background: '#4ade80' }} />
+                          <div className="bmi-seg" style={{ background: '#fb923c' }} />
+                          <div className="bmi-seg" style={{ background: '#fb7185' }} />
+                        </div>
+                      </div>
+                    )
+                  })()}
+                </div>
+              </div>
+            )}
+
+            {/* Today's Summary */}
+            <div className="dash-card summary-card">
+              <div className="summary-card-inner">
+                <h3 className="summary-title">Today's Summary</h3>
+                <div className="summary-row">
+                  <span className="summary-key">Meals Logged</span>
+                  <span className="summary-val">{todayFood.length}</span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-key">Total Calories</span>
+                  <span className="summary-val">{totalCalories}</span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-key">Active Min</span>
+                  <span className="summary-val">{totalActiveMinutes}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ─────────────────────────────
+              AI COACH CARD (col-span-6)
+          ───────────────────────────── */}
+          <div className="dash-card coach-card">
+            <div className="coach-card-inner">
+              <div className="coach-header">
+                <div className="icon-badge icon-badge--green">
+                  <SparklesIcon />
+                </div>
+                <div className="coach-title-wrap">
+                  <h3 className="coach-title">Agentic Health Coach</h3>
+                  <p className="coach-subtitle">AI-Generated Insights</p>
+                </div>
+              </div>
+
+              <div className="coach-body">
+                {coachLoading ? (
+                  <div className="coach-loading">
+                    <svg className="spin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 12a9 9 0 11-6.219-8.56" strokeLinecap="round"/>
+                    </svg>
+                    <span>Analyzing your health patterns…</span>
+                  </div>
+                ) : coachError ? (
+                  <div className="coach-error">{coachError}</div>
+                ) : coachTips.length === 0 ? (
+                  <div className="coach-empty">
+                    <SparklesIcon />
+                    <span>Log more meals and activities to unlock personalized coach insights.</span>
+                  </div>
+                ) : (
+                  <div className="coach-tips">
+                    {coachTips.map((tip, index) => (
+                      <div
+                        key={index}
+                        className="tip-card"
+                        style={{ animation: `slideInRight 0.5s ${index * 0.1}s cubic-bezier(0.16,1,0.3,1) both` }}
+                      >
+                        <span className="tip-index">0{index + 1}</span>
+                        <p className="tip-text">{tip}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* ─────────────────────────────
+              WEEKLY CHART (col-span-6)
+          ───────────────────────────── */}
+          <div className="dash-card chart-card">
+            <div className="chart-card-inner">
+              <div className="chart-header">
+                <h3 className="chart-title">Weekly Overview</h3>
+                <p className="chart-subtitle">Calories vs Activity</p>
+              </div>
+              <div className="chart-wrap">
+                <CaloriesChart />
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   )

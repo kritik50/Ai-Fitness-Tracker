@@ -1,45 +1,133 @@
-import { ActivityIcon, HomeIcon, MoonIcon, PersonStandingIcon, SunIcon, UserIcon, UtensilsIcon } from "lucide-react"
+import {
+  ActivityIcon,
+  HomeIcon,
+  Moon,
+  Sun,
+  Dumbbell,
+  UserIcon,
+  UtensilsIcon
+} from "lucide-react"
+
 import { useTheme } from "../context/useTheme"
 import { NavLink } from "react-router-dom"
-
+import "../components/Sidebar.css"
 
 const Sidebar = () => {
+  const navItems = [
+    { path: '/', label: 'Home', icon: HomeIcon, subtitle: 'View your dashboard' },
+    { path: '/food', label: 'Food', icon: UtensilsIcon, subtitle: 'Track your meals' },
+    { path: '/activity', label: 'Activity', icon: ActivityIcon, subtitle: 'Log workouts' },
+    { path: '/profile', label: 'Profile', icon: UserIcon, subtitle: 'Manage account' },
+  ]
 
-    const navItems = [
-        {path: '/', label: 'Home', icon: HomeIcon},
-        {path: '/food', label: 'Food', icon: UtensilsIcon},
-        {path: '/activity', label: 'Activity', icon: ActivityIcon},
-        {path: '/profile', label: 'Profile', icon: UserIcon},
-    ]
-
-    const {theme, toggleTheme} = useTheme()
+  const { theme, toggleTheme } = useTheme()
 
   return (
-    <nav className="hidden lg:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 p-6 transition-colors duration-200">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="size-10 rounded-xl bg-emerald-500 flex items-center justify-center">
-            <PersonStandingIcon className='size-7 text-white'/>
+    <nav className={`sidebar ${theme}`} aria-label="Primary navigation">
+
+      <div className="sidebar-content">
+
+        {/* Header */}
+        <div className="sidebar-header">
+
+          <div className="sidebar-top-row">
+
+            <div className="brand-section">
+
+              <div className="brand-icon">
+                <Dumbbell size={24} strokeWidth={2.5} />
+              </div>
+
+              <div>
+                <p className="brand-tag">Fitness Suite</p>
+                <h1 className="brand-title">FitTrack</h1>
+              </div>
+
+            </div>
+
+            <span className="pro-badge">Pro</span>
+
+          </div>
+
+          <p className="sidebar-description">
+            A calm workspace for movement, meals, and progress.
+          </p>
+
         </div>
-        <h1 className="text-2xl font-bold text-slate-800 dark:text-white">FitTrack</h1>
+
+        {/* Navigation */}
+        <div className="nav-section">
+
+          <p className="nav-heading">Quick Links</p>
+
+          <div className="nav-links">
+
+            {navItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.path === '/'}
+                className="nav-link-wrapper"
+              >
+                {({ isActive }) => (
+                  <div className={`nav-card ${isActive ? "active" : ""}`}>
+
+                    {isActive && <div className="active-indicator" />}
+
+                    <div className={`nav-icon-box ${isActive ? "active" : ""}`}>
+                      <item.icon
+                        size={18}
+                        strokeWidth={2.2}
+                        className="nav-icon"
+                      />
+                    </div>
+
+                    <div className="nav-text">
+                      <p className="nav-title">{item.label}</p>
+                      <p className="nav-subtitle">{item.subtitle}</p>
+                    </div>
+
+                    <div className="nav-arrow">→</div>
+
+                  </div>
+                )}
+              </NavLink>
+            ))}
+
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-col gap-2">
-        {navItems.map((item)=>(
-            <NavLink key={item.path} to={item.path} end={item.path === '/'}
-            className={({ isActive })=> `flex items-center gap-3 px-4 py-2.5 border-l-3 transition-all duration-200 ${isActive ? 'bg-emerald-50 dark:bg-emerald-900/10 text-emerald-600 dark:text-emerald-400 font-medium' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 border-transparent'}`}>
-                <item.icon className='size-5' />
-                <span className="text-base">{item.label}</span>
-            </NavLink>
-        ))}
-      </div>
+      {/* Theme Toggle */}
+      <div className="theme-toggle-wrapper">
 
-      <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800">
         <button
-         onClick={toggleTheme}
-         className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors duration-200 cursor-pointer">
-            {theme === 'light' ? <MoonIcon className='size-5' /> : <SunIcon className='size-5'/> }
-            <span className='text-base'>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+          onClick={toggleTheme}
+          className="theme-toggle-btn"
+        >
+
+          <div className="theme-icon-box">
+            {theme === 'light' ? (
+              <Moon size={18} />
+            ) : (
+              <Sun size={18} />
+            )}
+          </div>
+
+          <div className="theme-text">
+            <p className="theme-title">
+              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+            </p>
+
+            <p className="theme-subtitle">
+              Switch workspace ambience
+            </p>
+          </div>
+
+          <span className="theme-refresh">↺</span>
+
         </button>
+
       </div>
     </nav>
   )

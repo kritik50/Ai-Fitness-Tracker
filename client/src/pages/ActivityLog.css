@@ -1,0 +1,757 @@
+/* ============================================================
+   ActivityLog.css — FitTrack Activity Log Page
+   Exact token match with Dashboard.css + FoodLog.css:
+   - Plus Jakarta Sans body, Bebas Neue for numbers
+   - html.dark / :root dual-mode variables
+   - Same card anatomy, spacing, button shapes
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ══════════════════════════════════════
+   LIGHT MODE TOKENS
+══════════════════════════════════════ */
+:root {
+  --al-bg:             #f4f6f9;
+  --al-surface:        #ffffff;
+  --al-surface-2:      #f0f3f7;
+  --al-border:         rgba(0, 0, 0, 0.07);
+  --al-border-accent:  rgba(22, 163, 74, 0.3);
+
+  --al-accent:         #16a34a;
+  --al-accent-bright:  #22c55e;
+  --al-accent-glow:    rgba(22, 163, 74, 0.2);
+  --al-accent-bg:      rgba(22, 163, 74, 0.07);
+
+  --al-blue:           #2563eb;
+  --al-blue-bg:        rgba(37, 99, 235, 0.07);
+
+  --al-rose:           #e11d48;
+  --al-rose-bg:        rgba(225, 29, 72, 0.07);
+
+  --al-text-primary:   #0f172a;
+  --al-text-secondary: #475569;
+  --al-text-muted:     #94a3b8;
+
+  --al-input-bg:       #f8fafc;
+  --al-input-border:   rgba(0, 0, 0, 0.1);
+  --al-input-focus:    rgba(22, 163, 74, 0.15);
+
+  --al-font-display:   'Bebas Neue', sans-serif;
+  --al-font:           'Plus Jakarta Sans', sans-serif;
+
+  --al-radius-sm:      10px;
+  --al-radius-md:      16px;
+  --al-radius-lg:      20px;
+  --al-radius-xl:      26px;
+
+  --al-shadow:
+    0 1px 0 rgba(255,255,255,0.8) inset,
+    0 4px 16px rgba(0,0,0,0.06),
+    0 1px 4px rgba(0,0,0,0.04);
+
+  --al-shadow-btn:     0 4px 16px rgba(22,163,74,0.25);
+  --al-transition:     0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ══════════════════════════════════════
+   DARK MODE TOKENS
+══════════════════════════════════════ */
+html.dark {
+  --al-bg:             #080b0f;
+  --al-surface:        #111820;
+  --al-surface-2:      #161e28;
+  --al-border:         rgba(255, 255, 255, 0.06);
+  --al-border-accent:  rgba(74, 222, 128, 0.25);
+
+  --al-accent:         #4ade80;
+  --al-accent-bright:  #34d399;
+  --al-accent-glow:    rgba(74, 222, 128, 0.2);
+  --al-accent-bg:      rgba(74, 222, 128, 0.07);
+
+  --al-blue:           #60a5fa;
+  --al-blue-bg:        rgba(96, 165, 250, 0.07);
+
+  --al-rose:           #fb7185;
+  --al-rose-bg:        rgba(251, 113, 133, 0.07);
+
+  --al-text-primary:   #f1f5f9;
+  --al-text-secondary: #7d8fa3;
+  --al-text-muted:     #3d4f63;
+
+  --al-input-bg:       #0d1117;
+  --al-input-border:   rgba(255, 255, 255, 0.08);
+  --al-input-focus:    rgba(74, 222, 128, 0.15);
+
+  --al-shadow:
+    0 1px 0 rgba(255,255,255,0.04) inset,
+    0 8px 32px rgba(0,0,0,0.4),
+    0 2px 8px rgba(0,0,0,0.3);
+
+  --al-shadow-btn:     0 4px 20px rgba(74,222,128,0.25);
+}
+
+/* ══════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════ */
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -300% center; }
+  100% { background-position:  300% center; }
+}
+
+/* ══════════════════════════════════════
+   PAGE SHELL
+══════════════════════════════════════ */
+.activity-page {
+  min-height: 100vh;
+  background: var(--al-bg);
+  font-family: var(--al-font);
+  color: var(--al-text-primary);
+  padding: 32px 28px 48px;
+  animation: pageFade 0.5s cubic-bezier(0.16,1,0.3,1) both;
+  transition: background var(--al-transition), color var(--al-transition);
+}
+
+/* ══════════════════════════════════════
+   CARD BASE — override generic Card component
+══════════════════════════════════════ */
+.activity-page .card,
+.activity-page [class*="card"],
+.activity-page [class*="Card"] {
+  background: var(--al-surface) !important;
+  border: 1px solid var(--al-border) !important;
+  border-radius: var(--al-radius-xl) !important;
+  box-shadow: var(--al-shadow) !important;
+  padding: 24px 26px !important;
+  backdrop-filter: none !important;
+  transition: background var(--al-transition), border-color var(--al-transition) !important;
+}
+
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+.activity-header {
+  margin-bottom: 32px;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.activity-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.activity-title {
+  font-family: var(--al-font);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--al-text-primary);
+  line-height: 1.1;
+  margin-bottom: 6px;
+  transition: color var(--al-transition);
+}
+
+.activity-subtitle {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--al-text-secondary);
+  transition: color var(--al-transition);
+}
+
+/* ── Summary badge ── */
+.activity-summary {
+  text-align: right;
+  padding: 14px 20px;
+  border-radius: var(--al-radius-md);
+  background: var(--al-surface);
+  border: 1px solid var(--al-border);
+  box-shadow: var(--al-shadow);
+  flex-shrink: 0;
+  transition: background var(--al-transition), border-color var(--al-transition);
+}
+
+.summary-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--al-text-muted);
+  margin-bottom: 4px;
+  display: block;
+  transition: color var(--al-transition);
+}
+
+.summary-value {
+  font-family: var(--al-font-display);
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--al-accent);          /* ← GREEN, not blue */
+  transition: color var(--al-transition);
+}
+
+/* ══════════════════════════════════════
+   GRID
+══════════════════════════════════════ */
+.activity-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ══════════════════════════════════════
+   QUICK ADD SECTION
+══════════════════════════════════════ */
+.quick-add-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeUp 0.5s 0.05s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.section-heading {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--al-text-muted);
+  margin-bottom: 12px;
+  transition: color var(--al-transition);
+}
+
+.quick-add-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 0;
+  padding: 0;
+}
+
+/* Quick pill buttons */
+.quick-add-btn {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: var(--al-radius-sm);
+  border: 1px solid var(--al-border);
+  background: var(--al-surface-2);
+  color: var(--al-text-secondary);
+  font-family: var(--al-font);
+  font-weight: 600;
+  font-size: 0.83rem;
+  cursor: pointer;
+  transition: background var(--al-transition), border-color var(--al-transition),
+              color var(--al-transition), transform var(--al-transition);
+}
+
+.quick-add-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--al-border-accent);  /* ← GREEN border, not blue */
+  color: var(--al-text-primary);
+  background: var(--al-accent-bg);       /* ← GREEN tint, not blue */
+}
+
+/* ── Custom Activity button ── */
+.custom-activity-btn {
+  width: 100%;
+  height: 50px !important;
+  border-radius: var(--al-radius-md) !important;
+  font-family: var(--al-font) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  background: linear-gradient(135deg, var(--al-accent-bright), var(--al-accent)) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: var(--al-shadow-btn) !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--al-transition), box-shadow var(--al-transition) !important;
+}
+
+.custom-activity-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.custom-activity-btn:hover::before {
+  opacity: 1;
+  animation: shimmer 1.2s linear infinite;
+}
+
+.custom-activity-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 28px var(--al-accent-glow) !important;
+}
+
+.btn-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════
+   FORM CARD
+══════════════════════════════════════ */
+.activity-form-card {
+  border-color: var(--al-border-accent) !important;
+  animation: scaleIn 0.3s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.form-title {
+  font-family: var(--al-font);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--al-text-primary);
+  margin-bottom: 22px;
+  transition: color var(--al-transition);
+}
+
+.activity-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Two-column row (duration + calories) */
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row > * {
+  flex: 1;
+}
+
+/* ── Field groups (reused pattern from FoodLog) ── */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--al-text-muted);
+  padding-left: 2px;
+  transition: color var(--al-transition);
+}
+
+.field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-icon {
+  position: absolute;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  color: var(--al-text-muted);
+  pointer-events: none;
+  z-index: 2;
+  flex-shrink: 0;
+  transition: color var(--al-transition);
+}
+
+.field-wrapper:focus-within .field-icon {
+  color: var(--al-accent);
+}
+
+/* Input/Select component overrides — full-width, proper padding */
+.activity-input,
+.activity-select {
+  width: 100%;
+}
+
+.activity-input input,
+.activity-input > *,
+.activity-select select,
+.activity-select > * {
+  width: 100% !important;
+  padding: 12px 16px 12px 44px !important;
+  background: var(--al-input-bg) !important;
+  border: 1px solid var(--al-input-border) !important;
+  border-radius: var(--al-radius-sm) !important;
+  color: var(--al-text-primary) !important;
+  font-family: var(--al-font) !important;
+  font-size: 0.88rem !important;
+  font-weight: 400 !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color var(--al-transition), box-shadow var(--al-transition),
+              background var(--al-transition) !important;
+}
+
+.activity-input input::placeholder,
+.activity-select select::placeholder {
+  color: var(--al-text-muted) !important;
+}
+
+.activity-input input:focus,
+.activity-select select:focus {
+  border-color: var(--al-accent) !important;
+  box-shadow: 0 0 0 3px var(--al-input-focus) !important;
+}
+
+/* Bare inputs without wrapper icon (activity name at full width) */
+.activity-form input,
+.activity-form select {
+  width: 100%;
+  padding: 12px 16px !important;
+  background: var(--al-input-bg) !important;
+  border: 1px solid var(--al-input-border) !important;
+  border-radius: var(--al-radius-sm) !important;
+  color: var(--al-text-primary) !important;
+  font-family: var(--al-font) !important;
+  font-size: 0.88rem !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  -webkit-appearance: none;
+  transition: border-color var(--al-transition), box-shadow var(--al-transition) !important;
+}
+
+.activity-form input:focus,
+.activity-form select:focus {
+  border-color: var(--al-accent) !important;
+  box-shadow: 0 0 0 3px var(--al-input-focus) !important;
+}
+
+.activity-form input::placeholder {
+  color: var(--al-text-muted) !important;
+}
+
+/* Form action row */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.form-actions button {
+  flex: 1;
+  height: 46px;
+  border-radius: var(--al-radius-sm) !important;
+  font-family: var(--al-font) !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  transition: transform var(--al-transition) !important;
+}
+
+.form-actions button:hover {
+  transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════ */
+.empty-state-card {
+  animation: fadeUp 0.5s 0.1s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.empty-state-content {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-state-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: var(--al-radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  background: var(--al-accent-bg);
+  border: 1px solid var(--al-border-accent);
+}
+
+.empty-icon-svg {
+  width: 30px;
+  height: 30px;
+  color: var(--al-accent);
+}
+
+.empty-title {
+  font-family: var(--al-font);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--al-text-primary);
+  margin-bottom: 8px;
+  transition: color var(--al-transition);
+}
+
+.empty-subtitle {
+  font-size: 0.83rem;
+  font-weight: 400;
+  color: var(--al-text-secondary);
+  line-height: 1.5;
+  transition: color var(--al-transition);
+}
+
+/* ══════════════════════════════════════
+   ACTIVITY LIST CARD
+══════════════════════════════════════ */
+.activity-list-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 20px;
+}
+
+.activity-list-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--al-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--al-accent-bg);
+  border: 1px solid var(--al-border-accent);
+  flex-shrink: 0;
+  transition: transform var(--al-transition);
+}
+
+.activity-list-icon:hover {
+  transform: scale(1.05);
+}
+
+.list-icon-svg {
+  width: 18px;
+  height: 18px;
+  color: var(--al-accent);
+}
+
+.list-title {
+  font-family: var(--al-font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--al-text-primary);
+  transition: color var(--al-transition);
+}
+
+.list-subtitle {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--al-text-muted);
+  margin-top: 2px;
+  transition: color var(--al-transition);
+}
+
+/* ── Activity items ── */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 16px;
+  border-radius: var(--al-radius-md);
+  background: var(--al-surface-2);
+  border: 1px solid var(--al-border);
+  transition: border-color var(--al-transition), transform var(--al-transition),
+              background var(--al-transition);
+  animation: slideIn 0.4s ease both;
+}
+
+.activity-item:hover {
+  transform: translateY(-1px);
+  border-color: var(--al-border-accent);
+}
+
+.activity-left {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.activity-item-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--al-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--al-accent-bg);
+  border: 1px solid var(--al-border-accent);
+  flex-shrink: 0;
+  transition: transform var(--al-transition);
+}
+
+.activity-item:hover .activity-item-icon {
+  transform: scale(1.06);
+}
+
+.timer-icon {
+  width: 17px;
+  height: 17px;
+  color: var(--al-accent);
+}
+
+.activity-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--al-text-primary);
+  margin-bottom: 3px;
+  transition: color var(--al-transition);
+}
+
+.activity-time {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--al-text-muted);
+  transition: color var(--al-transition);
+}
+
+.activity-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.activity-stats {
+  text-align: right;
+}
+
+.activity-duration {
+  font-family: var(--al-font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  color: var(--al-text-primary);
+  line-height: 1.1;
+  transition: color var(--al-transition);
+}
+
+.activity-calories {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--al-text-muted);
+  margin-top: 2px;
+  transition: color var(--al-transition);
+}
+
+/* ── Delete button ── */
+.delete-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid transparent;
+  border-radius: var(--al-radius-sm);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--al-transition), border-color var(--al-transition),
+              transform var(--al-transition);
+}
+
+.delete-btn:hover {
+  background: var(--al-rose-bg);
+  border-color: rgba(225, 29, 72, 0.15);
+  transform: scale(1.08);
+}
+
+.delete-icon {
+  width: 15px;
+  height: 15px;
+  color: var(--al-rose);
+}
+
+/* ══════════════════════════════════════
+   TOTALS ROW
+══════════════════════════════════════ */
+.activity-total {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--al-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color var(--al-transition);
+}
+
+.total-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--al-text-secondary);
+  transition: color var(--al-transition);
+}
+
+.total-value {
+  font-family: var(--al-font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.01em;
+  color: var(--al-accent);           /* ← GREEN, not blue */
+  line-height: 1;
+  transition: color var(--al-transition);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .activity-page { padding: 20px 16px 40px; }
+
+  .activity-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .activity-summary { width: 100%; text-align: left; }
+  .activity-title   { font-size: 1.8rem; }
+
+  .form-row { flex-direction: column; }
+
+  .activity-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .activity-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

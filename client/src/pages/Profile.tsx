@@ -11,6 +11,7 @@ import Select from "../components/ui/Select";
 import toast from "react-hot-toast";
 import api from "../configs/api";
 import { getApiErrorMessage } from "../utils/api";
+import "../pages/Profile.css"
 
 
 const Profile = () => {
@@ -52,151 +53,309 @@ const Profile = () => {
 
   if(!user || !formData) return null
 
+  const profileInfoItems = [
+    {
+      label: 'Age',
+      value: `${user.age} years`,
+      icon: Calendar,
+      gradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(99, 102, 241, 0.08))',
+      border: '1px solid rgba(59, 130, 246, 0.15)',
+      iconColor: '#3b82f6',
+    },
+    {
+      label: 'Weight',
+      value: `${user.weight} kg`,
+      icon: Scale,
+      gradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(168, 85, 247, 0.08))',
+      border: '1px solid rgba(139, 92, 246, 0.15)',
+      iconColor: '#8b5cf6',
+    },
+    ...(user.height !== 0 ? [{
+      label: 'Height',
+      value: `${user.height} cm`,
+      icon: User,
+      gradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 214, 160, 0.08))',
+      border: '1px solid rgba(16, 185, 129, 0.15)',
+      iconColor: '#10b981',
+    }] : []),
+    {
+      label: 'Goal',
+      value: goalLabels[user?.goal || 'gain'],
+      icon: Target,
+      gradient: 'linear-gradient(135deg, rgba(249, 115, 22, 0.12), rgba(251, 146, 60, 0.08))',
+      border: '1px solid rgba(249, 115, 22, 0.15)',
+      iconColor: '#f97316',
+    },
+  ];
+
   return (
-    <div className='page-container'>
-      {/* Header */}
-      <div className="page-header">
-        <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Profile</h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage your settings</p>
+  <div className='profile-page'>
+
+    {/* HEADER */}
+
+    <div className="profile-header">
+
+      <div className="profile-header-content">
+
+        <h1 className="profile-title">
+          Profile
+        </h1>
+
+        <p className="profile-subtitle">
+          Manage your settings
+        </p>
+
       </div>
 
-      <div className='profile-content'>
-        {/* left col */}
-          <Card>
-            {/* card title  */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="size-12 rounded-xl bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
-                <User className='size-6 text-white' />
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Your Profile</h2>
-                <p className="text-slate-500 dark:text-slate-400 text-xs">Member since {new Date(user?.createdAt || '').toLocaleDateString()}</p>
-              </div>
+    </div>
+
+    <div className='profile-layout'>
+
+      {/* LEFT */}
+
+      <Card className="profile-main-card">
+
+        <div className="profile-card-content">
+
+          {/* TOP */}
+
+          <div className="profile-top">
+
+            <div className="profile-avatar">
+              <User className='profile-avatar-icon' />
             </div>
 
-            {isEditing ? (
-              <div className="space-y-4">
+            <div>
 
-                <Input label="Age" type='number' value={formData.age} onChange={(v)=>setFormData({...formData, age: Number(v)})} min={13} max={120}/>
+              <h2 className="profile-card-title">
+                Your Profile
+              </h2>
 
-                <Input label="Weight (kg)" type='number' value={formData.weight} onChange={(v)=>setFormData({...formData, weight: Number(v)})} min={20} max={300}/>
+              <p className="profile-member-since">
+                Member since {new Date(user?.createdAt || '').toLocaleDateString()}
+              </p>
 
-                <Input label="Height (cm)" type='number' value={formData.height} onChange={(v)=>setFormData({...formData, height: Number(v)})} min={100} max={250}/>
+            </div>
 
-                <Select label="Fitness Goal" value={formData.goal as string} onChange={(v)=> setFormData({...formData, goal: v as 'lose' | 'maintain' | 'gain'})} options={goalOptions}/>
+          </div>
 
-                <div className="flex gap-3 pt-2">
-                  <Button variant="secondary" className="flex-1" 
+          {/* EDIT MODE */}
+
+          {isEditing ? (
+
+            <div className="profile-form">
+
+              <Input
+                label="Age"
+                type='number'
+                value={formData.age}
+                onChange={(v)=>setFormData({...formData, age: Number(v)})}
+                min={13}
+                max={120}
+              />
+
+              <Input
+                label="Weight (kg)"
+                type='number'
+                value={formData.weight}
+                onChange={(v)=>setFormData({...formData, weight: Number(v)})}
+                min={20}
+                max={300}
+              />
+
+              <Input
+                label="Height (cm)"
+                type='number'
+                value={formData.height}
+                onChange={(v)=>setFormData({...formData, height: Number(v)})}
+                min={100}
+                max={250}
+              />
+
+              <Select
+                label="Fitness Goal"
+                value={formData.goal as string}
+                onChange={(v)=> setFormData({...formData, goal: v as 'lose' | 'maintain' | 'gain'})}
+                options={goalOptions}
+              />
+
+              <div className="profile-actions">
+
+                <Button
+                  variant="secondary"
+                  className="flex-1"
                   onClick={()=>{
                     setIsEditing(false);
                     setFormData(getProfileFormData())
-                  }}>
-                       Cancel
-                  </Button>
-                  <Button onClick={handleSave} className="flex-1">
-                       Save Changes
-                  </Button>
-                </div>
-              </div>
-            ): (
-              <>
-              <div className="space-y-4">
+                  }}
+                >
+                  Cancel
+                </Button>
 
-                {/* age  */}
-                <div className="flex items-center gap-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-200">
-                  <div className="size-10 rounded-lg bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
-                    <Calendar className="size-4.5 text-blue-600 dark:text-blue-400"/>
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Age</p>
-                    <p className="font-semibold text-slate-800 dark:text-white">{user.age} years</p>
-                  </div>
-                </div>
-
-                {/* Weight  */}
-                <div className="flex items-center gap-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-200">
-                  <div className="size-10 rounded-lg bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
-                    <Scale className="size-4.5 text-purple-600 dark:text-purple-400"/>
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Weight</p>
-                    <p className="font-semibold text-slate-800 dark:text-white">{user.weight} kg</p>
-                  </div>
-                </div>
-
-                 {/* Height  */}
-                 {user.height !== 0 && (
-                  <div className="flex items-center gap-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-200">
-                  <div className="size-10 rounded-lg bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
-                    <User className="size-4.5 text-green-600 dark:text-green-400"/>
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Height</p>
-                    <p className="font-semibold text-slate-800 dark:text-white">{user.height} cm</p>
-                  </div>
-                </div>
-                 )}
-
-                 {/* Goal  */}
-                 <div className="flex items-center gap-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-200">
-                  <div className="size-10 rounded-lg bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center">
-                    <Target className="size-4.5 text-orange-600 dark:text-orange-400"/>
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Goal</p>
-                    <p className="font-semibold text-slate-800 dark:text-white">{goalLabels[user?.goal || 'gain']}</p>
-                  </div>
-                </div>
+                <Button
+                  onClick={handleSave}
+                  className="flex-1"
+                >
+                  Save Changes
+                </Button>
 
               </div>
 
-              <Button variant="secondary" onClick={()=>{
-                setFormData(getProfileFormData())
-                setIsEditing(true)
-              }} className="w-full mt-4">
-                Edit Profile
-              </Button>
-              </>
-            )}
-
-          </Card>
-        {/* right col */}
-          <div className="space-y-4">
-            {/* Stats Card */}
-            <Card>
-              <h3 className='font-semibold text-slate-800 dark:text-white mb-4'>Your Stats</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-emerald-50 dark:bg-emerald-900/10 rounded-xl">
-                  <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.totalFoodEntries}</p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Food entries</p>
-                </div>
-                <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/10 rounded-xl">
-                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalActivities}</p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Activities</p>
-                </div>
-              </div>
-              
-            </Card>
-            {/* toggle theme button for phone  */}
-            <div className='lg:hidden'>
-              <button
-              onClick={toggleTheme}
-               className="flex items-center gap-3 px-4 py-2.5 w-full text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors duration-200 cursor-pointer"> 
-                {theme === 'light' ? <MoonIcon className='size-5'/> : <SunIcon className='size-5'/>}
-                <span className="text-base">{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
-              </button>
             </div>
 
-            {/* Logout button */}
-            <Button variant="danger" onClick={logout} className="w-full ring ring-red-300 hover:ring-2">
-              <LogOutIcon className='size-4'/>
-              Logout
-            </Button>
+          ) : (
+
+            <>
+              <div className="profile-info-list">
+
+                {profileInfoItems.map((item, idx) => {
+
+                  const IconComp = item.icon;
+
+                  return (
+                    <div
+                      key={item.label}
+                      className="profile-info-card"
+                      style={{
+                        animationDelay: `${idx * 0.06}s`
+                      }}
+                    >
+
+                      <div
+                        className="profile-info-icon"
+                        style={{
+                          background: item.gradient,
+                          border: item.border,
+                        }}
+                      >
+                        <IconComp
+                          className="profile-info-svg"
+                          style={{
+                            color: item.iconColor
+                          }}
+                        />
+                      </div>
+
+                      <div>
+
+                        <p className="profile-info-label">
+                          {item.label}
+                        </p>
+
+                        <p className="profile-info-value">
+                          {item.value}
+                        </p>
+
+                      </div>
+
+                    </div>
+                  )
+                })}
+
+              </div>
+
+              <Button
+                variant="secondary"
+                onClick={()=>{
+                  setFormData(getProfileFormData())
+                  setIsEditing(true)
+                }}
+                className="edit-profile-btn"
+              >
+                Edit Profile
+              </Button>
+
+            </>
+          )}
+
+        </div>
+
+      </Card>
+
+      {/* RIGHT */}
+
+      <div className="profile-sidebar">
+
+        {/* STATS */}
+
+        <Card className="stats-card">
+
+          <div className="stats-card-content">
+
+            <h3 className='stats-title'>
+              Your Stats
+            </h3>
+
+            <div className="stats-grid">
+
+              <div className="stat-box food">
+
+                <p className="stat-number green">
+                  {stats.totalFoodEntries}
+                </p>
+
+                <p className="stat-label">
+                  Food entries
+                </p>
+
+              </div>
+
+              <div className="stat-box activity">
+
+                <p className="stat-number blue">
+                  {stats.totalActivities}
+                </p>
+
+                <p className="stat-label">
+                  Activities
+                </p>
+
+              </div>
+
+            </div>
 
           </div>
+
+        </Card>
+
+        {/* MOBILE THEME BUTTON */}
+
+        <div className='mobile-theme-wrap'>
+
+          <button
+            onClick={toggleTheme}
+            className="theme-toggle-btn"
+          >
+
+            {theme === 'light'
+              ? <MoonIcon className='theme-icon'/>
+              : <SunIcon className='theme-icon'/>
+            }
+
+            <span className="theme-text">
+              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+            </span>
+
+          </button>
+
+        </div>
+
+        {/* LOGOUT */}
+
+        <Button
+          variant="danger"
+          onClick={logout}
+          className="logout-btn"
+        >
+          <LogOutIcon className='logout-icon'/>
+          Logout
+        </Button>
+
       </div>
+
     </div>
-  )
+  </div>
+)
 }
 
 export default Profile

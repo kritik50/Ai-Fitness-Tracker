@@ -5,6 +5,8 @@ interface InputProps {
     type?: React.HTMLInputTypeAttribute;
     value: string | number;
     onChange: (value: string | number) => void;
+    onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
     placeholder?: string;
     className?: string;
     required?: boolean;
@@ -12,7 +14,7 @@ interface InputProps {
     max?: string | number;
 }
 
-export default function Input({ label, type = 'text', value, onChange, placeholder = '', className = '', required = false, min, max }: InputProps) {
+export default function Input({ label, type = 'text', value, onChange, onBlur, onFocus, placeholder = '', className = '', required = false, min, max }: InputProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (type === 'number') {
             const raw = e.target.value;
@@ -31,7 +33,7 @@ export default function Input({ label, type = 'text', value, onChange, placehold
     return (
         <div className={`space-y-2 ${className}`}>
             {label && (
-                <label className='block text-sm font-medium text-slate-700 dark:text-slate-300'>
+                <label className='block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400'>
                     {label}
                     {required && <span className='text-red-500 ml-1'>*</span>}
                 </label>
@@ -43,8 +45,41 @@ export default function Input({ label, type = 'text', value, onChange, placehold
                 placeholder={placeholder}
                 min={min}
                 max={max}
-                className='w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200'
+                className='w-full px-4 py-3.5 text-sm outline-none transition-all duration-300'
+                style={{
+                    color: 'var(--text-primary)',
+                    borderRadius: '16px',
+                    background: 'color-mix(in srgb, var(--surface-card-strong) 82%, transparent)',
+                    border: '1.5px solid var(--surface-card-border)',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
+                }}
+                onFocus={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--accent)';
+                    e.currentTarget.style.boxShadow = '0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent)';
+                    e.currentTarget.style.background = 'var(--surface-card-strong)';
+                    onFocus?.(e);
+                }}
+                onBlur={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--surface-card-border)';
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.background = 'color-mix(in srgb, var(--surface-card-strong) 82%, transparent)';
+                    onBlur?.(e);
+                }}
             />
+            <style>{`
+                .dark input[type="text"],
+                .dark input[type="number"],
+                .dark input[type="email"],
+                .dark input[type="password"] {
+                    background: color-mix(in srgb, var(--surface-card-strong) 86%, transparent) !important;
+                    border-color: var(--surface-card-border) !important;
+                }
+                .dark input:focus {
+                    border-color: var(--accent) !important;
+                    box-shadow: 0 0 0 4px rgba(61, 209, 176, 0.12) !important;
+                    background: var(--surface-card-strong) !important;
+                }
+            `}</style>
         </div>
     );
 }

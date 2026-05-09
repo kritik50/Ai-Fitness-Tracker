@@ -1,0 +1,786 @@
+/* ============================================================
+   FoodLog.css — FitTrack Food Log Page
+   Matches Dashboard.css token system exactly:
+   - Same fonts: Bebas Neue (numbers) + Plus Jakarta Sans (body)
+   - Same surface/border/accent variables via html.dark
+   - Same card anatomy, progress bars, icon badges
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ══════════════════════════════════════
+   LIGHT MODE TOKENS
+══════════════════════════════════════ */
+:root {
+  --fl-bg:             #f4f6f9;
+  --fl-surface:        #ffffff;
+  --fl-surface-2:      #f0f3f7;
+  --fl-border:         rgba(0, 0, 0, 0.07);
+  --fl-border-accent:  rgba(22, 163, 74, 0.3);
+
+  --fl-accent:         #16a34a;
+  --fl-accent-bright:  #22c55e;
+  --fl-accent-glow:    rgba(22, 163, 74, 0.2);
+  --fl-accent-bg:      rgba(22, 163, 74, 0.07);
+
+  --fl-rose:           #e11d48;
+  --fl-rose-bg:        rgba(225, 29, 72, 0.07);
+
+  --fl-text-primary:   #0f172a;
+  --fl-text-secondary: #475569;
+  --fl-text-muted:     #94a3b8;
+
+  --fl-input-bg:       #f8fafc;
+  --fl-input-border:   rgba(0, 0, 0, 0.1);
+  --fl-input-focus:    rgba(22, 163, 74, 0.15);
+
+  --fl-font-display:   'Bebas Neue', sans-serif;
+  --fl-font:           'Plus Jakarta Sans', sans-serif;
+
+  --fl-radius-sm:      10px;
+  --fl-radius-md:      16px;
+  --fl-radius-lg:      20px;
+  --fl-radius-xl:      26px;
+
+  --fl-shadow:
+    0 1px 0 rgba(255,255,255,0.8) inset,
+    0 4px 16px rgba(0,0,0,0.06),
+    0 1px 4px rgba(0,0,0,0.04);
+
+  --fl-shadow-btn:     0 4px 16px rgba(22,163,74,0.25);
+
+  --fl-transition:     0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ══════════════════════════════════════
+   DARK MODE TOKENS
+══════════════════════════════════════ */
+html.dark {
+  --fl-bg:             #080b0f;
+  --fl-surface:        #111820;
+  --fl-surface-2:      #161e28;
+  --fl-border:         rgba(255, 255, 255, 0.06);
+  --fl-border-accent:  rgba(74, 222, 128, 0.25);
+
+  --fl-accent:         #4ade80;
+  --fl-accent-bright:  #34d399;
+  --fl-accent-glow:    rgba(74, 222, 128, 0.2);
+  --fl-accent-bg:      rgba(74, 222, 128, 0.07);
+
+  --fl-rose:           #fb7185;
+  --fl-rose-bg:        rgba(251, 113, 133, 0.07);
+
+  --fl-text-primary:   #f1f5f9;
+  --fl-text-secondary: #7d8fa3;
+  --fl-text-muted:     #3d4f63;
+
+  --fl-input-bg:       #0d1117;
+  --fl-input-border:   rgba(255, 255, 255, 0.08);
+  --fl-input-focus:    rgba(74, 222, 128, 0.15);
+
+  --fl-shadow:
+    0 1px 0 rgba(255,255,255,0.04) inset,
+    0 8px 32px rgba(0,0,0,0.4),
+    0 2px 8px rgba(0,0,0,0.3);
+
+  --fl-shadow-btn:     0 4px 20px rgba(74,222,128,0.25);
+}
+
+/* ══════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -300% center; }
+  100% { background-position:  300% center; }
+}
+
+/* ══════════════════════════════════════
+   PAGE SHELL
+══════════════════════════════════════ */
+.food-page {
+  min-height: 100vh;
+  background: var(--fl-bg);
+  font-family: var(--fl-font);
+  color: var(--fl-text-primary);
+  padding: 32px 28px 48px;
+  transition: background var(--fl-transition), color var(--fl-transition);
+}
+
+/* ══════════════════════════════════════
+   CARD BASE — override generic Card component
+══════════════════════════════════════ */
+.food-page .card,
+.food-page [class*="card"],
+.food-page [class*="Card"] {
+  background: var(--fl-surface) !important;
+  border: 1px solid var(--fl-border) !important;
+  border-radius: var(--fl-radius-xl) !important;
+  box-shadow: var(--fl-shadow) !important;
+  transition: background var(--fl-transition), border-color var(--fl-transition) !important;
+  padding: 24px 26px !important;
+}
+
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+.food-header {
+  margin-bottom: 32px;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.food-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.food-title {
+  font-family: var(--fl-font);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--fl-text-primary);
+  line-height: 1.1;
+  margin-bottom: 6px;
+  transition: color var(--fl-transition);
+}
+
+.food-subtitle {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--fl-text-secondary);
+  transition: color var(--fl-transition);
+}
+
+/* ── Summary badge ── */
+.food-summary {
+  text-align: right;
+  padding: 14px 20px;
+  border-radius: var(--fl-radius-md);
+  background: var(--fl-surface);
+  border: 1px solid var(--fl-border);
+  box-shadow: var(--fl-shadow);
+  flex-shrink: 0;
+  transition: background var(--fl-transition), border-color var(--fl-transition);
+}
+
+.summary-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fl-text-muted);
+  margin-bottom: 4px;
+  transition: color var(--fl-transition);
+}
+
+.summary-value {
+  font-family: var(--fl-font-display);
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--fl-accent);
+  transition: color var(--fl-transition);
+}
+
+/* ══════════════════════════════════════
+   GRID
+══════════════════════════════════════ */
+.food-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ══════════════════════════════════════
+   QUICK SECTION
+══════════════════════════════════════ */
+.quick-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeUp 0.5s 0.05s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.section-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fl-text-muted);
+  margin-bottom: 14px;
+  transition: color var(--fl-transition);
+}
+
+.quick-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.quick-btn {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: var(--fl-radius-sm);
+  border: 1px solid var(--fl-border);
+  background: var(--fl-surface-2);
+  color: var(--fl-text-secondary);
+  font-family: var(--fl-font);
+  font-weight: 600;
+  font-size: 0.83rem;
+  cursor: pointer;
+  transition: background var(--fl-transition), border-color var(--fl-transition),
+              color var(--fl-transition), transform var(--fl-transition);
+}
+
+.quick-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--fl-border-accent);
+  color: var(--fl-text-primary);
+  background: var(--fl-accent-bg);
+}
+
+/* ══════════════════════════════════════
+   ACTION BUTTONS
+   (targeting the Button component wrapper)
+══════════════════════════════════════ */
+.food-action-btn {
+  width: 100%;
+  height: 50px !important;
+  border-radius: var(--fl-radius-md) !important;
+  font-family: var(--fl-font) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  background: linear-gradient(135deg, var(--fl-accent-bright), var(--fl-accent)) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: var(--fl-shadow-btn) !important;
+  transition: transform var(--fl-transition), box-shadow var(--fl-transition) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.food-action-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.food-action-btn:hover::before {
+  opacity: 1;
+  animation: shimmer 1.2s linear infinite;
+}
+
+.food-action-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 28px var(--fl-accent-glow) !important;
+}
+
+.food-action-btn.secondary {
+  background: var(--fl-surface-2) !important;
+  color: var(--fl-text-secondary) !important;
+  box-shadow: var(--fl-shadow) !important;
+  border: 1px solid var(--fl-border) !important;
+}
+
+.food-action-btn.secondary:hover {
+  color: var(--fl-text-primary) !important;
+  border-color: var(--fl-border-accent) !important;
+}
+
+.btn-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════
+   FORM CARD
+══════════════════════════════════════ */
+.food-form-card {
+  border-color: var(--fl-border-accent) !important;
+  animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.form-title {
+  font-family: var(--fl-font);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--fl-text-primary);
+  margin-bottom: 22px;
+  transition: color var(--fl-transition);
+}
+
+.food-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Field groups ── */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fl-text-muted);
+  padding-left: 2px;
+  transition: color var(--fl-transition);
+}
+
+.field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-icon {
+  position: absolute;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  color: var(--fl-text-muted);
+  pointer-events: none;
+  z-index: 2;
+  flex-shrink: 0;
+  transition: color var(--fl-transition);
+}
+
+/* Override Input/Select component internals */
+.food-input,
+.food-select {
+  width: 100%;
+}
+
+.food-input input,
+.food-select select,
+/* also catch generic wrappers the component may use */
+.food-input > *,
+.food-select > * {
+  width: 100% !important;
+  padding: 12px 16px 12px 44px !important;
+  background: var(--fl-input-bg) !important;
+  border: 1px solid var(--fl-input-border) !important;
+  border-radius: var(--fl-radius-sm) !important;
+  color: var(--fl-text-primary) !important;
+  font-family: var(--fl-font) !important;
+  font-size: 0.88rem !important;
+  font-weight: 400 !important;
+  outline: none !important;
+  transition: border-color var(--fl-transition), box-shadow var(--fl-transition),
+              background var(--fl-transition) !important;
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box !important;
+}
+
+.food-input input::placeholder,
+.food-select select::placeholder {
+  color: var(--fl-text-muted) !important;
+}
+
+.food-input input:focus,
+.food-select select:focus {
+  border-color: var(--fl-accent) !important;
+  box-shadow: 0 0 0 3px var(--fl-input-focus) !important;
+}
+
+.field-wrapper:focus-within .field-icon {
+  color: var(--fl-accent);
+}
+
+/* Form action row */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.form-actions .flex-1 {
+  flex: 1;
+}
+
+/* Override Button component inside form */
+.form-actions button {
+  width: 100%;
+  height: 46px;
+  border-radius: var(--fl-radius-sm) !important;
+  font-family: var(--fl-font) !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  transition: transform var(--fl-transition), box-shadow var(--fl-transition),
+              background var(--fl-transition) !important;
+}
+
+.form-actions button:hover {
+  transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════
+   LOADING OVERLAY
+══════════════════════════════════════ */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.loading-card {
+  padding: 30px 36px;
+  border-radius: var(--fl-radius-xl);
+  background: var(--fl-surface);
+  border: 1px solid var(--fl-border);
+  box-shadow: var(--fl-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  min-width: 200px;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  color: var(--fl-accent);
+  animation: spin 0.9s linear infinite;
+}
+
+.loading-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--fl-text-secondary);
+}
+
+/* ══════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════ */
+.empty-food-card {
+  animation: fadeUp 0.5s 0.1s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.empty-food-content {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-food-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: var(--fl-radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  background: var(--fl-accent-bg);
+  border: 1px solid var(--fl-border-accent);
+}
+
+.empty-icon-svg {
+  width: 30px;
+  height: 30px;
+  color: var(--fl-accent);
+}
+
+.empty-food-title {
+  font-family: var(--fl-font);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--fl-text-primary);
+  margin-bottom: 8px;
+  transition: color var(--fl-transition);
+}
+
+.empty-food-subtitle {
+  font-size: 0.83rem;
+  font-weight: 400;
+  color: var(--fl-text-secondary);
+  line-height: 1.5;
+  transition: color var(--fl-transition);
+}
+
+/* ══════════════════════════════════════
+   MEAL GROUPS
+══════════════════════════════════════ */
+.meal-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.meal-card {
+  overflow: hidden;
+  transition: border-color var(--fl-transition), transform var(--fl-transition);
+}
+
+.meal-card:hover {
+  border-color: rgba(255,255,255,0.1) !important;
+  transform: translateY(-1px);
+}
+
+/* ── Meal header ── */
+.meal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.meal-left {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+/* Icon badge — reuses mealColors classes from assets */
+.meal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--fl-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform var(--fl-transition);
+}
+
+.meal-card:hover .meal-icon {
+  transform: scale(1.06);
+}
+
+.meal-icon-svg {
+  width: 18px;
+  height: 18px;
+}
+
+.meal-title {
+  font-family: var(--fl-font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fl-text-primary);
+  text-transform: capitalize;
+  transition: color var(--fl-transition);
+}
+
+.meal-count {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--fl-text-muted);
+  margin-top: 2px;
+  transition: color var(--fl-transition);
+}
+
+.meal-calories {
+  font-family: var(--fl-font-display);
+  font-size: 1.6rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--fl-text-primary);
+  transition: color var(--fl-transition);
+}
+
+/* ── Food item list ── */
+.food-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.food-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 16px;
+  border-radius: var(--fl-radius-md);
+  background: var(--fl-surface-2);
+  border: 1px solid var(--fl-border);
+  transition: border-color var(--fl-transition), transform var(--fl-transition),
+              background var(--fl-transition);
+}
+
+.food-item:hover {
+  transform: translateY(-1px);
+  border-color: var(--fl-border-accent);
+}
+
+.food-item-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.food-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fl-text-primary);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--fl-transition);
+}
+
+.food-type {
+  font-size: 0.7rem;
+  font-weight: 400;
+  text-transform: capitalize;
+  color: var(--fl-text-muted);
+  transition: color var(--fl-transition);
+}
+
+.food-item-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.food-calories {
+  font-family: var(--fl-font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  color: var(--fl-text-primary);
+  transition: color var(--fl-transition);
+}
+
+/* ── Delete button ── */
+.delete-food-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid transparent;
+  border-radius: var(--fl-radius-sm);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--fl-transition), border-color var(--fl-transition),
+              transform var(--fl-transition);
+}
+
+.delete-food-btn:hover {
+  background: var(--fl-rose-bg);
+  border-color: rgba(225, 29, 72, 0.15);
+  transform: scale(1.08);
+}
+
+.delete-food-icon {
+  width: 15px;
+  height: 15px;
+  color: var(--fl-rose);
+}
+
+/* ── APPEND THESE TO THE BOTTOM OF FoodLog.css ── */
+
+/* Inline estimating indicator next to the Calories label */
+.calories-estimating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--fl-accent);
+  text-transform: none;
+  vertical-align: middle;
+}
+
+.estimating-icon {
+  width: 11px;
+  height: 11px;
+  animation: spin 1s linear infinite;
+}
+
+/* "AI estimate" badge shown after calories are filled */
+.calories-auto-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fl-accent);
+  background: var(--fl-accent-bg);
+  border: 1px solid var(--fl-border-accent);
+  border-radius: 99px;
+  padding: 2px 8px;
+  vertical-align: middle;
+}
+
+/* Skeleton pulse shown while estimating */
+.food-input-skeleton {
+  width: 100%;
+  height: 44px;
+  border-radius: var(--fl-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--fl-surface-2) 25%,
+    var(--fl-surface) 50%,
+    var(--fl-surface-2) 75%
+  );
+  background-size: 300% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border: 1px solid var(--fl-border);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .food-page { padding: 20px 16px 40px; }
+
+  .food-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .food-summary { width: 100%; text-align: left; }
+
+  .food-title { font-size: 1.8rem; }
+
+  .food-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .food-item-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
