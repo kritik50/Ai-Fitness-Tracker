@@ -9,6 +9,7 @@ import Login from "./pages/Login"
 import Loading from "./components/Loading"
 import Onboarding from "./pages/Onboarding"
 import { Toaster } from "react-hot-toast"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 
 const App = () => {
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="profile" element={<Profile />}/>
         </Route>
       </Routes>
+      <SpeedInsights />
     </>
   )
 }
