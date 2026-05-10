@@ -68,14 +68,14 @@ const Onboarding = () => {
         <div className="p-6 pt-12 onboarding-wrapper" style={{ animation: 'fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{
-              background: 'linear-gradient(135deg, #059669, #0d9488)',
-              boxShadow: '0 4px 14px rgba(5, 150, 105, 0.25)',
+              background: 'var(--green)',
+              boxShadow: 'var(--shadow-btn)',
             }}>
               <PersonStanding className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">FitTrack</h1>
+            <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>FitTrack</h1>
           </div>
-          <p className="text-slate-400 dark:text-slate-500 mt-4 font-medium">Let's personalize your experience</p>
+          <p className="mt-4 font-medium" style={{ color: 'var(--text-secondary)' }}>Let's personalize your experience</p>
         </div>
 
          {/* Progress Indicator */}
@@ -83,20 +83,21 @@ const Onboarding = () => {
             <div className="flex gap-2 max-w-2xl"> 
               {[1,2,3].map((s)=>(
                 <div key={s} className="h-2 flex-1 rounded-full overflow-hidden" style={{
-                  background: s <= step ? 'transparent' : 'rgba(148, 163, 184, 0.15)',
+                  background: s <= step ? 'transparent' : 'var(--surface-2)',
+                  border: s <= step ? 'none' : '1px solid var(--border)',
                   transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}>
                   {s <= step && (
                     <div className="h-full w-full rounded-full" style={{
-                      background: 'linear-gradient(90deg, #059669, #10b981)',
-                      boxShadow: '0 0 8px rgba(16, 185, 129, 0.25)',
+                      background: 'var(--green)',
+                      boxShadow: '0 0 8px var(--green-glow)',
                       animation: 'progressFill 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
                     }} />
                   )}
                 </div>
               ))}
             </div>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-3 font-medium">Step {step} of {totalSteps}</p>
+            <p className="text-xs mt-3 font-medium" style={{ color: 'var(--text-muted)' }}>Step {step} of {totalSteps}</p>
          </div>
 
           {/* Form Content */}
@@ -106,15 +107,15 @@ const Onboarding = () => {
                 <div className="flex items-center gap-4 mb-8">
 
                   <div className="size-12 rounded-2xl flex items-center justify-center" style={{
-                    background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 214, 160, 0.08))',
-                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                    background: 'var(--green-bg)',
+                    border: '1px solid var(--border-accent)',
                   }}>
-                  <User className="size-6 text-emerald-500"/>
+                  <User className="size-6" style={{ color: 'var(--green)' }}/>
                   </div>
 
                   <div>
-                    <h2 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight">How old are you?</h2>
-                    <p className="text-slate-400 dark:text-slate-500 text-sm font-medium">This helps us calculate your needs</p>
+                    <h2 className="text-lg font-bold tracking-tight" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>How old are you?</h2>
+                    <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>This helps us calculate your needs</p>
                   </div>
                 </div>
                 <Input label="Age" type="number" className="max-w-2xl" value={formData.age} onChange={(v)=>updateField('age', v)} placeholder="Enter your age" min={13} max={120} required/>
@@ -126,15 +127,15 @@ const Onboarding = () => {
                 <div className="flex items-center gap-4 mb-8">
 
                   <div className="size-12 rounded-2xl flex items-center justify-center" style={{
-                    background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 214, 160, 0.08))',
-                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                    background: 'var(--green-bg)',
+                    border: '1px solid var(--border-accent)',
                   }}>
-                  <ScaleIcon className="size-6 text-emerald-500"/>
+                  <ScaleIcon className="size-6" style={{ color: 'var(--green)' }}/>
                   </div>
 
                   <div>
-                    <h2 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight">Your measurements</h2>
-                    <p className="text-slate-400 dark:text-slate-500 text-sm font-medium">Help us track your progress</p>
+                    <h2 className="text-lg font-bold tracking-tight" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>Your measurements</h2>
+                    <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Help us track your progress</p>
                   </div>
                 </div>
                 <div className="flex flex-col gap-4 max-w-2xl">
@@ -153,15 +154,15 @@ const Onboarding = () => {
                 <div className="flex items-center gap-4 mb-8">
 
                   <div className="size-12 rounded-2xl flex items-center justify-center" style={{
-                    background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 214, 160, 0.08))',
-                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                    background: 'var(--green-bg)',
+                    border: '1px solid var(--border-accent)',
                   }}>
-                  <Target className="size-6 text-emerald-500"/>
+                  <Target className="size-6" style={{ color: 'var(--green)' }}/>
                   </div>
 
                   <div>
-                    <h2 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight">What's your goal?</h2>
-                    <p className="text-slate-400 dark:text-slate-500 text-sm font-medium">We'll tailor your experience</p>
+                    <h2 className="text-lg font-bold tracking-tight" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>What's your goal?</h2>
+                    <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>We'll tailor your experience</p>
                   </div>
                 </div>
 
@@ -195,20 +196,20 @@ const Onboarding = () => {
                     }}
                     className="onboarding-option-btn"
                     style={formData.goal === option.value ? {
-                      borderColor: '#10b981',
-                      boxShadow: '0 0 0 2px rgba(16, 185, 129, 0.2), 0 4px 16px rgba(16, 185, 129, 0.1)',
-                      background: 'rgba(16, 185, 129, 0.04)',
+                      borderColor: 'var(--border-accent)',
+                      boxShadow: '0 0 0 2px var(--green-glow), 0 4px 16px var(--green-glow)',
+                      background: 'var(--green-bg)',
                     } : {}}>
-                      <span className="text-base font-semibold text-slate-700 dark:text-slate-200">{option.label}</span>
+                      <span className="text-base font-semibold" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>{option.label}</span>
                     </button>
                   ))}
                 </div>
 
-                <div className="my-6 max-w-lg" style={{ borderTop: '1px solid var(--surface-card-border)' }}></div>
+                <div className="my-6 max-w-lg" style={{ borderTop: '1px solid var(--border)' }}></div>
 
                 {/* Daily Targets  */}
                 <div className="space-y-8 max-w-lg">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4">Daily Targets</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--text-secondary)' }}>Daily Targets</h3>
 
                   <div className="space-y-6">
 
