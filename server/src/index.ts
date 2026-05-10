@@ -14,7 +14,7 @@ const AUTHENTICATED_PERMISSIONS = [
   { action: 'api::activity-log.activity-log.update' },
   { action: 'api::activity-log.activity-log.delete' },
   // Profile (custom route)
-  { action: 'api::profile.profile.update-me' },
+  { action: 'api::profile.profile.updateMe' },
   // AI Coach (custom route)
   { action: 'api::ai-coach.ai-coach.insight' },
   // Image Analysis (custom route)
