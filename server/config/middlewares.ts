@@ -19,13 +19,15 @@ const LOCAL_DEV_ORIGINS = [
 
 export default ({ env }) => {
   const clientUrl = env("CLIENT_URL");
-  const configuredOrigins = [
+  const configuredOrigins = Array.from(new Set([
     clientUrl ? clientUrl.replace(/\/$/, "") : "",
+    "https://ai-fitness-trackers.vercel.app",
+    "https://ai-fitness-tracker.vercel.app",
     ...parseOrigins(env("CORS_ORIGINS")),
-  ].filter(Boolean);
+    ...LOCAL_DEV_ORIGINS,
+  ].filter(Boolean)));
 
-  // Use configured origins in production, all local dev origins otherwise
-  const origin = configuredOrigins.length > 0 ? configuredOrigins : LOCAL_DEV_ORIGINS;
+  const origin = configuredOrigins;
 
   return [
     "strapi::logger",
