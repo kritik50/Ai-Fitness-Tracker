@@ -12,7 +12,7 @@
    LIGHT MODE TOKENS
 ══════════════════════════════════════ */
 :root {
-  --fl-bg:             #f4f6f9;
+  --fl-bg:             #f8fafc;
   --fl-surface:        #ffffff;
   --fl-surface-2:      #f0f3f7;
   --fl-border:         rgba(0, 0, 0, 0.07);
@@ -28,7 +28,7 @@
 
   --fl-text-primary:   #0f172a;
   --fl-text-secondary: #475569;
-  --fl-text-muted:     #94a3b8;
+  --fl-text-muted:     #64748b;
 
   --fl-input-bg:       #f8fafc;
   --fl-input-border:   rgba(0, 0, 0, 0.1);

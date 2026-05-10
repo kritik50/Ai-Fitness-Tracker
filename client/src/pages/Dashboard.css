@@ -8,8 +8,8 @@
 
 /* ── Variables — LIGHT MODE (default) ── */
 :root {
-  --bg:            #f4f6f9;
-  --bg-raised:     #eef1f5;
+  --bg:            #f8fafc;
+  --bg-raised:     #f1f5f9;
   --surface:       #ffffff;
   --surface-2:     #f0f3f7;
   --surface-hover: #e8ecf2;
@@ -43,7 +43,7 @@
 
   --text-primary:  #0f172a;
   --text-secondary:#475569;
-  --text-muted:    #94a3b8;
+  --text-muted:    #64748b;
 
   --font-display:  'Bebas Neue', sans-serif;
   --font-body:     'Plus Jakarta Sans', sans-serif;

@@ -12,7 +12,7 @@
    LIGHT MODE TOKENS
 ══════════════════════════════════════ */
 :root {
-  --al-bg:             #f4f6f9;
+  --al-bg:             #f8fafc;
   --al-surface:        #ffffff;
   --al-surface-2:      #f0f3f7;
   --al-border:         rgba(0, 0, 0, 0.07);
@@ -31,7 +31,7 @@
 
   --al-text-primary:   #0f172a;
   --al-text-secondary: #475569;
-  --al-text-muted:     #94a3b8;
+  --al-text-muted:     #64748b;
 
   --al-input-bg:       #f8fafc;
   --al-input-border:   rgba(0, 0, 0, 0.1);
