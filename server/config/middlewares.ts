@@ -1,7 +1,7 @@
 const parseOrigins = (value?: string) =>
   (value || "")
     .split(",")
-    .map((origin) => origin.trim())
+    .map((origin) => origin.trim().replace(/\/$/, ""))
     .filter(Boolean);
 
 // Vite dev server auto-increments ports (5173, 5174, 5175...) — list them all
@@ -18,8 +18,9 @@ const LOCAL_DEV_ORIGINS = [
 ];
 
 export default ({ env }) => {
+  const clientUrl = env("CLIENT_URL");
   const configuredOrigins = [
-    env("CLIENT_URL"),
+    clientUrl ? clientUrl.replace(/\/$/, "") : "",
     ...parseOrigins(env("CORS_ORIGINS")),
   ].filter(Boolean);
 

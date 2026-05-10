@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.DEV
+const rawURL = import.meta.env.DEV
   ? ''
-  : import.meta.env.VITE_STRAPI_API_URL || 'http://localhost:1337'
+  : import.meta.env.VITE_STRAPI_API_URL || 'http://localhost:1337';
+
+const baseURL = rawURL.replace(/\/$/, '');
 
 console.log('API Base URL:', baseURL); // Debug log
 
