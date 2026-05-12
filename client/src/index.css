@@ -99,6 +99,11 @@
   --danger-soft:          var(--danger-bg);
   --accent-strong:        var(--accent);
   --bg-elevated:          var(--surface);
+
+  /* ── Green aliases (onboarding uses these) ── */
+  --green:                var(--accent);
+  --green-bg:             var(--accent-bg);
+  --green-glow:           var(--accent-glow);
 }
 
 /* ── Dark Mode Tokens ── */
@@ -170,6 +175,11 @@
   --danger-soft:          var(--danger-bg);
   --accent-strong:        var(--accent);
   --bg-elevated:          var(--surface);
+
+  /* ── Green aliases (onboarding uses these) ── */
+  --green:                var(--accent);
+  --green-bg:             var(--accent-bg);
+  --green-glow:           var(--accent-glow);
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -465,7 +475,8 @@ button, input, select, textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 24px 64px;
+  justify-content: flex-start;
+  padding: 0 20px 80px;
   transition: background var(--transition-slow);
 }
 

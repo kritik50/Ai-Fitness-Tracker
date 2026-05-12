@@ -17,9 +17,6 @@ export default function Button({
     type = 'button',
     disabled = false
 }: ButtonProps) {
-    const baseStyles =
-        'px-5 py-3 flex items-center justify-center gap-2 rounded-xl font-semibold text-sm tracking-[0.01em] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer select-none';
-
     const variantStyles: Record<string, React.CSSProperties> = {
         primary: {
             background: 'linear-gradient(135deg, var(--accent), var(--teal))',
@@ -41,13 +38,33 @@ export default function Button({
         },
     };
 
+    const baseInlineStyles: React.CSSProperties = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 8,
+        padding: '12px 20px',
+        borderRadius: 'var(--radius-lg)',
+        fontFamily: 'var(--font-body)',
+        fontSize: 14,
+        fontWeight: 600,
+        letterSpacing: '0.01em',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1,
+        transition: 'all 0.2s cubic-bezier(0.16,1,0.3,1)',
+        outline: 'none',
+        userSelect: 'none',
+        whiteSpace: 'nowrap',
+        ...variantStyles[variant],
+    };
+
     return (
         <button
             type={type}
             onClick={onClick}
             disabled={disabled}
-            className={`${baseStyles} ${className}`}
-            style={variantStyles[variant]}
+            className={className}
+            style={baseInlineStyles}
             onMouseEnter={(e) => {
                 if (disabled) return;
                 if (variant === 'primary') {

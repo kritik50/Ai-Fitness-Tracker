@@ -1,0 +1,308 @@
+/* ════════════════════════════════════════════════════════════
+   ONBOARDING — FitTrack
+   Zero Tailwind dependency — uses unified CSS token system
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Page shell ── */
+.ob-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px 80px;
+  transition: background var(--transition-slow);
+}
+
+.ob-shell {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Header ── */
+.ob-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 32px;
+}
+
+.ob-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.ob-brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent), var(--teal));
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+  flex-shrink: 0;
+}
+
+.ob-brand-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  transition: color var(--transition-slow);
+}
+
+.ob-subtitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color var(--transition-slow);
+}
+
+/* ── Progress bar ── */
+.ob-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.ob-progress-track {
+  display: flex;
+  gap: 6px;
+}
+
+.ob-progress-seg {
+  height: 4px;
+  flex: 1;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ob-progress-seg.active {
+  border-color: transparent;
+  background: transparent;
+}
+
+.ob-progress-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  box-shadow: 0 0 10px var(--accent-glow);
+  animation: progressFill 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ob-step-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  transition: color var(--transition-slow);
+}
+
+/* ── Card ── */
+.ob-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: 36px 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  transition: background var(--transition-slow), border-color var(--transition-slow), box-shadow var(--transition-slow);
+  animation: fadeUp 0.45s 0.05s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Step heading ── */
+.ob-step-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ob-step-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-bg);
+  border: 1px solid var(--border-accent);
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.ob-step-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 4px;
+  transition: color var(--transition-slow);
+}
+
+.ob-step-desc {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color var(--transition-slow);
+}
+
+/* ── Form fields ── */
+.ob-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ob-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ob-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-left: 2px;
+  transition: color var(--transition-slow);
+}
+
+.ob-label-required {
+  color: var(--rose);
+  margin-left: 3px;
+}
+
+.ob-input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition-slow);
+  -webkit-appearance: none;
+}
+
+.ob-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+  background: var(--surface);
+}
+
+.ob-input::placeholder {
+  color: var(--text-faint);
+}
+
+/* ── Goal options ── */
+.ob-goal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ob-goal-btn {
+  width: 100%;
+  padding: 18px 22px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.ob-goal-btn:hover {
+  border-color: var(--border-accent);
+  background: var(--surface-3);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.ob-goal-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  color: var(--text-primary);
+}
+
+/* ── Divider ── */
+.ob-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+/* ── Daily targets section ── */
+.ob-targets-heading {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  transition: color var(--transition-slow);
+}
+
+.ob-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ── Navigation buttons ── */
+.ob-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .ob-page {
+    padding: 32px 16px 60px;
+    align-items: flex-start;
+  }
+
+  .ob-card {
+    padding: 28px 24px 24px;
+  }
+
+  .ob-nav {
+    flex-direction: row;
+  }
+
+  .ob-nav button {
+    flex: 1;
+  }
+}

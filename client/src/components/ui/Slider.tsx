@@ -1,4 +1,6 @@
 import React from "react";
+import { Info } from "lucide-react";
+import Tooltip from "./Tooltip";
 
 interface SliderProps {
     label?: string;
@@ -12,49 +14,120 @@ interface SliderProps {
     infoText?: string;
 }
 
-import { Info } from "lucide-react";
-import Tooltip from "./Tooltip";
-
-const Slider: React.FC<SliderProps> = ({ label, min = 0, max = 100, step = 1, value, onChange, className = "", unit = "", infoText }) => {
+const Slider: React.FC<SliderProps> = ({
+    label,
+    min = 0,
+    max = 100,
+    step = 1,
+    value,
+    onChange,
+    className = "",
+    unit = "",
+    infoText
+}) => {
     const percentage = ((value - min) / (max - min)) * 100;
 
     return (
-        <div className={`w-full ${className}`}>
+        <div style={{ width: '100%' }} className={className}>
             {label && (
-                <div className="flex justify-between items-center mb-3">
-                    <div className="flex items-center gap-2">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">{label}</label>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 12,
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <label style={{
+                            fontSize: 10,
+                            fontWeight: 700,
+                            letterSpacing: '0.14em',
+                            textTransform: 'uppercase',
+                            color: 'var(--text-muted)',
+                            fontFamily: 'var(--font-body)',
+                        }}>
+                            {label}
+                        </label>
                         {infoText && (
                             <Tooltip content={infoText}>
-                                <Info className="size-3.5 text-slate-400 hover:text-emerald-500 cursor-help transition-colors duration-200" />
+                                <Info style={{
+                                    width: 14,
+                                    height: 14,
+                                    color: 'var(--text-faint)',
+                                    cursor: 'help',
+                                }} />
                             </Tooltip>
                         )}
                     </div>
-                    <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
+                    <span style={{
+                        fontSize: 14,
+                        fontWeight: 700,
+                        color: 'var(--accent)',
+                        fontFamily: 'var(--font-body)',
+                        fontVariantNumeric: 'tabular-nums',
+                    }}>
                         {value} {unit}
                     </span>
                 </div>
             )}
-            <div className="relative w-full h-2.5 rounded-full cursor-pointer" style={{
-                background: 'var(--surface-muted)',
-                border: '1px solid var(--surface-card-border)',
+
+            {/* Track */}
+            <div style={{
+                position: 'relative',
+                width: '100%',
+                height: 10,
+                borderRadius: 999,
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border)',
+                cursor: 'pointer',
             }}>
-                {/* Track fill */}
-                <div className="absolute top-0 left-0 h-full rounded-full" style={{
+                {/* Fill */}
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    height: '100%',
                     width: `${percentage}%`,
-                    background: 'linear-gradient(90deg, #156f5d, #2dbf9f)',
-                    boxShadow: '0 0 10px rgba(21, 111, 93, 0.24)',
+                    borderRadius: 999,
+                    background: 'linear-gradient(90deg, var(--accent), var(--teal))',
+                    boxShadow: '0 0 10px var(--accent-glow)',
                     transition: 'width 0.15s ease-out',
+                    pointerEvents: 'none',
                 }} />
 
-                {/* Thumb input */}
-                <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} className="absolute w-full h-full opacity-0 cursor-pointer z-10" />
+                {/* Hidden native range (handles interaction) */}
+                <input
+                    type="range"
+                    min={min}
+                    max={max}
+                    step={step}
+                    value={value}
+                    onChange={(e) => onChange(Number(e.target.value))}
+                    style={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                        opacity: 0,
+                        cursor: 'pointer',
+                        zIndex: 10,
+                        margin: 0,
+                        padding: 0,
+                    }}
+                />
 
-                <div className="absolute top-1/2 -translate-y-1/2 w-5 h-5 rounded-full shadow-md pointer-events-none transition-transform duration-75 ease-out" style={{
+                {/* Thumb */}
+                <div style={{
+                    position: 'absolute',
+                    top: '50%',
                     left: `calc(${percentage}% - 10px)`,
-                    background: 'var(--surface-card-strong)',
+                    transform: 'translateY(-50%)',
+                    width: 20,
+                    height: 20,
+                    borderRadius: '50%',
+                    background: 'var(--surface)',
                     border: '2.5px solid var(--accent)',
-                    boxShadow: '0 6px 16px rgba(21, 111, 93, 0.18), 0 2px 6px rgba(0,0,0,0.08)',
+                    boxShadow: '0 4px 12px var(--accent-glow), 0 2px 4px rgba(0,0,0,0.1)',
+                    pointerEvents: 'none',
+                    transition: 'left 0.1s ease-out',
                 }} />
             </div>
         </div>

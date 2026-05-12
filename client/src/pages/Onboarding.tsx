@@ -3,12 +3,12 @@ import { useState } from "react"
 import toast, { Toaster } from "react-hot-toast"
 import { useAppContext } from "../context/useAppContext"
 import type { ProfileFormData } from "../types"
-import Input from "../components/ui/Input"
 import Button from "../components/ui/Button"
 import { ageRanges, goalOptions } from "../assets/assets"
 import Slider from "../components/ui/Slider"
 import api from "../configs/api"
 import { getApiErrorMessage } from "../utils/api"
+import "../pages/Onboarding.css"
 
 
 const Onboarding = () => {
@@ -29,6 +29,7 @@ const Onboarding = () => {
    const updateField = (field: keyof ProfileFormData, value: string | number)=>{
     setFormData({...formData, [field]: value})
    }
+
    const handleNext = async ()=>{
     if(step === 1){
       if(!formData.age || Number(formData.age) < 13 || Number(formData.age) > 120){
@@ -63,185 +64,203 @@ const Onboarding = () => {
   return (
     <>
       <Toaster />
-      <div className="onboarding-container">
-        {/* Header */}
-        <div className="p-6 pt-12 onboarding-wrapper" style={{ animation: 'fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{
-              background: 'var(--green)',
-              boxShadow: 'var(--shadow-btn)',
-            }}>
-              <PersonStanding className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>FitTrack</h1>
-          </div>
-          <p className="mt-4 font-medium" style={{ color: 'var(--text-secondary)' }}>Let's personalize your experience</p>
-        </div>
+      <div className="ob-page">
+        <div className="ob-shell">
 
-         {/* Progress Indicator */}
-         <div className="px-6 mb-8 onboarding-wrapper" style={{ animation: 'fadeInUp 0.5s 0.05s cubic-bezier(0.16, 1, 0.3, 1) both' }}>
-            <div className="flex gap-2 max-w-2xl"> 
-              {[1,2,3].map((s)=>(
-                <div key={s} className="h-2 flex-1 rounded-full overflow-hidden" style={{
-                  background: s <= step ? 'transparent' : 'var(--surface-2)',
-                  border: s <= step ? 'none' : '1px solid var(--border)',
-                  transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}>
-                  {s <= step && (
-                    <div className="h-full w-full rounded-full" style={{
-                      background: 'var(--green)',
-                      boxShadow: '0 0 8px var(--green-glow)',
-                      animation: 'progressFill 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-                    }} />
-                  )}
+          {/* ── Brand header ── */}
+          <div className="ob-header">
+            <div className="ob-brand-row">
+              <div className="ob-brand-icon">
+                <PersonStanding style={{ width: 24, height: 24 }} />
+              </div>
+              <span className="ob-brand-name">FitTrack</span>
+            </div>
+            <p className="ob-subtitle">Let's personalize your experience</p>
+          </div>
+
+          {/* ── Progress bar ── */}
+          <div className="ob-progress">
+            <div className="ob-progress-track">
+              {[1, 2, 3].map((s) => (
+                <div key={s} className={`ob-progress-seg${s <= step ? ' active' : ''}`}>
+                  {s <= step && <div className="ob-progress-fill" />}
                 </div>
               ))}
             </div>
-            <p className="text-xs mt-3 font-medium" style={{ color: 'var(--text-muted)' }}>Step {step} of {totalSteps}</p>
-         </div>
+            <span className="ob-step-label">Step {step} of {totalSteps}</span>
+          </div>
 
-          {/* Form Content */}
-          <div className="flex-1 px-6 onboarding-wrapper">
+          {/* ── Card ── */}
+          <div className="ob-card">
+
+            {/* Step 1 — Age */}
             {step === 1 && (
-              <div className="space-y-6" style={{ animation: 'fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
-                <div className="flex items-center gap-4 mb-8">
-
-                  <div className="size-12 rounded-2xl flex items-center justify-center" style={{
-                    background: 'var(--green-bg)',
-                    border: '1px solid var(--border-accent)',
-                  }}>
-                  <User className="size-6" style={{ color: 'var(--green)' }}/>
+              <>
+                <div className="ob-step-header">
+                  <div className="ob-step-icon">
+                    <User style={{ width: 22, height: 22 }} />
                   </div>
-
                   <div>
-                    <h2 className="text-lg font-bold tracking-tight" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>How old are you?</h2>
-                    <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>This helps us calculate your needs</p>
+                    <h2 className="ob-step-title">How old are you?</h2>
+                    <p className="ob-step-desc">This helps us calculate your needs</p>
                   </div>
                 </div>
-                <Input label="Age" type="number" className="max-w-2xl" value={formData.age} onChange={(v)=>updateField('age', v)} placeholder="Enter your age" min={13} max={120} required/>
-              </div>
+
+                <div className="ob-fields">
+                  <div className="ob-field">
+                    <label className="ob-label">
+                      Age <span className="ob-label-required">*</span>
+                    </label>
+                    <input
+                      className="ob-input"
+                      type="number"
+                      value={formData.age || ''}
+                      onChange={(e) => updateField('age', e.target.value === '' ? 0 : Number(e.target.value))}
+                      placeholder="Enter your age"
+                      min={13}
+                      max={120}
+                    />
+                  </div>
+                </div>
+              </>
             )}
 
+            {/* Step 2 — Measurements */}
             {step === 2 && (
-              <div className="space-y-6 onboarding-wrapper" style={{ animation: 'fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
-                <div className="flex items-center gap-4 mb-8">
-
-                  <div className="size-12 rounded-2xl flex items-center justify-center" style={{
-                    background: 'var(--green-bg)',
-                    border: '1px solid var(--border-accent)',
-                  }}>
-                  <ScaleIcon className="size-6" style={{ color: 'var(--green)' }}/>
+              <>
+                <div className="ob-step-header">
+                  <div className="ob-step-icon">
+                    <ScaleIcon style={{ width: 22, height: 22 }} />
                   </div>
-
                   <div>
-                    <h2 className="text-lg font-bold tracking-tight" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>Your measurements</h2>
-                    <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Help us track your progress</p>
+                    <h2 className="ob-step-title">Your measurements</h2>
+                    <p className="ob-step-desc">Help us track your progress</p>
                   </div>
                 </div>
-                <div className="flex flex-col gap-4 max-w-2xl">
 
-                  <Input label="Weight (kg)" type="number" value={formData.weight} onChange={(v)=>updateField('weight', v)} placeholder="Enter your weight" min={20} max={300} required/>
+                <div className="ob-fields">
+                  <div className="ob-field">
+                    <label className="ob-label">
+                      Weight (kg) <span className="ob-label-required">*</span>
+                    </label>
+                    <input
+                      className="ob-input"
+                      type="number"
+                      value={formData.weight || ''}
+                      onChange={(e) => updateField('weight', e.target.value === '' ? 0 : Number(e.target.value))}
+                      placeholder="e.g. 70"
+                      min={20}
+                      max={300}
+                    />
+                  </div>
 
-                  <Input label="Height (cm) - Optional" type="number" value={formData.height} onChange={(v)=>updateField('height', v)} placeholder="Enter your height" min={100} max={250} />
-
+                  <div className="ob-field">
+                    <label className="ob-label">Height (cm) — Optional</label>
+                    <input
+                      className="ob-input"
+                      type="number"
+                      value={formData.height || ''}
+                      onChange={(e) => updateField('height', e.target.value === '' ? 0 : Number(e.target.value))}
+                      placeholder="e.g. 175"
+                      min={100}
+                      max={250}
+                    />
+                  </div>
                 </div>
-                
-              </div>
+              </>
             )}
 
+            {/* Step 3 — Goal */}
             {step === 3 && (
-              <div className="space-y-6 onboarding-wrapper" style={{ animation: 'fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
-                <div className="flex items-center gap-4 mb-8">
-
-                  <div className="size-12 rounded-2xl flex items-center justify-center" style={{
-                    background: 'var(--green-bg)',
-                    border: '1px solid var(--border-accent)',
-                  }}>
-                  <Target className="size-6" style={{ color: 'var(--green)' }}/>
+              <>
+                <div className="ob-step-header">
+                  <div className="ob-step-icon">
+                    <Target style={{ width: 22, height: 22 }} />
                   </div>
-
                   <div>
-                    <h2 className="text-lg font-bold tracking-tight" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>What's your goal?</h2>
-                    <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>We'll tailor your experience</p>
+                    <h2 className="ob-step-title">What's your goal?</h2>
+                    <p className="ob-step-desc">We'll tailor your experience</p>
                   </div>
                 </div>
 
+                {/* Goal options */}
+                <div className="ob-goal-list">
+                  {goalOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      className={`ob-goal-btn${formData.goal === option.value ? ' selected' : ''}`}
+                      onClick={() => {
+                        const age = Number(formData.age);
+                        const range = ageRanges.find((r) => age <= r.max) || ageRanges[ageRanges.length - 1]
 
-                {/* options  */}
-                <div className="space-y-3 max-w-lg">
-                  {goalOptions.map((option)=>(
-                    <button 
-                    key={option.value}
-                    onClick={()=>{
-                      const age = Number(formData.age);
-                      const range = ageRanges.find((r)=>age <= r.max) || ageRanges[ageRanges.length - 1]
+                        let intake = range.maintain;
+                        let burn = range.burn;
 
-                      let intake = range.maintain;
-                      let burn = range.burn;
+                        if (option.value === 'lose') {
+                          intake -= 400;
+                          burn += 100;
+                        } else if (option.value === 'gain') {
+                          intake += 500;
+                          burn -= 100;
+                        }
 
-                      if(option.value === 'lose'){
-                        intake -= 400;
-                        burn += 100;
-                      }else if(option.value === 'gain'){
-                         intake += 500;
-                        burn -= 100;
-                      }
-
-                      setFormData({
-                        ...formData,
-                        goal: option.value as 'lose' | 'maintain' | 'gain',
-                        dailyCalorieIntake: intake,
-                        dailyCalorieBurn: burn,
-                      })
-                    }}
-                    className="onboarding-option-btn"
-                    style={formData.goal === option.value ? {
-                      borderColor: 'var(--border-accent)',
-                      boxShadow: '0 0 0 2px var(--green-glow), 0 4px 16px var(--green-glow)',
-                      background: 'var(--green-bg)',
-                    } : {}}>
-                      <span className="text-base font-semibold" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>{option.label}</span>
+                        setFormData({
+                          ...formData,
+                          goal: option.value as 'lose' | 'maintain' | 'gain',
+                          dailyCalorieIntake: intake,
+                          dailyCalorieBurn: burn,
+                        })
+                      }}
+                    >
+                      {option.label}
                     </button>
                   ))}
                 </div>
 
-                <div className="my-6 max-w-lg" style={{ borderTop: '1px solid var(--border)' }}></div>
+                <div className="ob-divider" />
 
-                {/* Daily Targets  */}
-                <div className="space-y-8 max-w-lg">
-                  <h3 className="text-sm font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--text-secondary)' }}>Daily Targets</h3>
-
-                  <div className="space-y-6">
-
-                    <Slider label="Daily Calorie Intake" min={120} max={4000} step={50} value={formData.dailyCalorieIntake} onChange={(v)=>updateField('dailyCalorieIntake', v)} unit="kcal" infoText="The total calories you plan to consume each day."/>
-
-                    <Slider label="Daily Calorie Burn" min={100} max={2000} step={50} value={formData.dailyCalorieBurn} onChange={(v)=>updateField('dailyCalorieBurn', v)} unit="kcal" infoText="The total calories you aim to burn through exercise and activity each day."/>
+                {/* Daily Targets */}
+                <div>
+                  <p className="ob-targets-heading">Daily Targets</p>
+                  <div className="ob-sliders">
+                    <Slider
+                      label="Daily Calorie Intake"
+                      min={1200} max={4000} step={50}
+                      value={formData.dailyCalorieIntake}
+                      onChange={(v) => updateField('dailyCalorieIntake', v)}
+                      unit="kcal"
+                      infoText="The total calories you plan to consume each day."
+                    />
+                    <Slider
+                      label="Daily Calorie Burn"
+                      min={100} max={2000} step={50}
+                      value={formData.dailyCalorieBurn}
+                      onChange={(v) => updateField('dailyCalorieBurn', v)}
+                      unit="kcal"
+                      infoText="The total calories you aim to burn through exercise and activity each day."
+                    />
                   </div>
                 </div>
-              </div>
+              </>
             )}
+
+          </div>{/* /ob-card */}
+
+          {/* ── Navigation ── */}
+          <div className="ob-nav">
+            {step > 1 && (
+              <Button variant="secondary" onClick={() => setStep(step > 1 ? step - 1 : 1)}>
+                <ArrowLeft style={{ width: 18, height: 18 }} />
+                Back
+              </Button>
+            )}
+            <Button onClick={handleNext}>
+              {step === totalSteps ? 'Get Started' : 'Continue'}
+              <ArrowRight style={{ width: 18, height: 18 }} />
+            </Button>
           </div>
 
-            {/* Navigation Buttons */}
-          <div className="p-6 pb-10 onboarding-wrapper">
-            <div className="flex gap-3 lg:justify-end">
-              {step > 1 && (
-                <Button variant="secondary" onClick={()=>setStep(step > 1 ? step - 1 : 1)} className="max-lg:flex-1 lg:px-10">
-                  <span className="flex items-center justify-center gap-2">
-                    <ArrowLeft className="w-5 h-5"/>
-                    Back
-                  </span>
-                </Button>
-              )}
-              <Button onClick={handleNext} className="max-lg:flex-1 lg:px-10">
-                  <span className="flex items-center justify-center gap-2">
-                    {step === totalSteps ? 'Get Started' : 'Continue'}
-                    <ArrowRight className="w-5 h-5"/>
-                  </span>
-                </Button>
-            </div>
-          </div>
-
+        </div>
       </div>
     </>
   )
