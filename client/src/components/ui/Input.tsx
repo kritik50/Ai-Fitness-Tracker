@@ -14,11 +14,22 @@ interface InputProps {
     max?: string | number;
 }
 
-export default function Input({ label, type = 'text', value, onChange, onBlur, onFocus, placeholder = '', className = '', required = false, min, max }: InputProps) {
+export default function Input({
+    label,
+    type = 'text',
+    value,
+    onChange,
+    onBlur,
+    onFocus,
+    placeholder = '',
+    className = '',
+    required = false,
+    min,
+    max
+}: InputProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (type === 'number') {
             const raw = e.target.value;
-            // If field is cleared, pass 0 to avoid NaN in state
             if (raw === '' || raw === '-') {
                 onChange(0);
             } else {
@@ -31,11 +42,14 @@ export default function Input({ label, type = 'text', value, onChange, onBlur, o
     };
 
     return (
-        <div className={`space-y-2 ${className}`}>
+        <div className={`space-y-1.5 ${className}`}>
             {label && (
-                <label className='block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400'>
+                <label
+                    className='block text-[10px] font-bold uppercase tracking-widest'
+                    style={{ color: 'var(--text-muted)', letterSpacing: '0.12em' }}
+                >
                     {label}
-                    {required && <span className='text-red-500 ml-1'>*</span>}
+                    {required && <span style={{ color: 'var(--rose)', marginLeft: 3 }}>*</span>}
                 </label>
             )}
             <input
@@ -45,41 +59,27 @@ export default function Input({ label, type = 'text', value, onChange, onBlur, o
                 placeholder={placeholder}
                 min={min}
                 max={max}
-                className='w-full px-4 py-3.5 text-sm outline-none transition-all duration-300'
+                className='w-full px-4 py-3 text-sm outline-none transition-all duration-200'
                 style={{
                     color: 'var(--text-primary)',
-                    borderRadius: '16px',
-                    background: 'color-mix(in srgb, var(--surface-card-strong) 82%, transparent)',
-                    border: '1.5px solid var(--surface-card-border)',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--surface-2)',
+                    border: '1.5px solid var(--border)',
+                    fontFamily: 'var(--font-body)',
                 }}
                 onFocus={(e) => {
                     e.currentTarget.style.borderColor = 'var(--accent)';
-                    e.currentTarget.style.boxShadow = '0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent)';
-                    e.currentTarget.style.background = 'var(--surface-card-strong)';
+                    e.currentTarget.style.boxShadow = '0 0 0 4px var(--accent-glow)';
+                    e.currentTarget.style.background = 'var(--surface)';
                     onFocus?.(e);
                 }}
                 onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--surface-card-border)';
+                    e.currentTarget.style.borderColor = 'var(--border)';
                     e.currentTarget.style.boxShadow = 'none';
-                    e.currentTarget.style.background = 'color-mix(in srgb, var(--surface-card-strong) 82%, transparent)';
+                    e.currentTarget.style.background = 'var(--surface-2)';
                     onBlur?.(e);
                 }}
             />
-            <style>{`
-                .dark input[type="text"],
-                .dark input[type="number"],
-                .dark input[type="email"],
-                .dark input[type="password"] {
-                    background: color-mix(in srgb, var(--surface-card-strong) 86%, transparent) !important;
-                    border-color: var(--surface-card-border) !important;
-                }
-                .dark input:focus {
-                    border-color: var(--accent) !important;
-                    box-shadow: 0 0 0 4px rgba(61, 209, 176, 0.12) !important;
-                    background: var(--surface-card-strong) !important;
-                }
-            `}</style>
         </div>
     );
 }

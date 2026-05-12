@@ -1,94 +1,8 @@
-/* ============================================================
-   FoodLog.css — FitTrack Food Log Page
-   Matches Dashboard.css token system exactly:
-   - Same fonts: Bebas Neue (numbers) + Plus Jakarta Sans (body)
-   - Same surface/border/accent variables via html.dark
-   - Same card anatomy, progress bars, icon badges
-   ============================================================ */
+/* ════════════════════════════════════════════════════════════
+   FoodLog.css — FitTrack
+   Uses unified token system from index.css.
+   ════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
-/* ══════════════════════════════════════
-   LIGHT MODE TOKENS
-══════════════════════════════════════ */
-:root {
-  --fl-bg:             #f8fafc;
-  --fl-surface:        #ffffff;
-  --fl-surface-2:      #f0f3f7;
-  --fl-border:         rgba(0, 0, 0, 0.07);
-  --fl-border-accent:  rgba(22, 163, 74, 0.3);
-
-  --fl-accent:         #16a34a;
-  --fl-accent-bright:  #22c55e;
-  --fl-accent-glow:    rgba(22, 163, 74, 0.2);
-  --fl-accent-bg:      rgba(22, 163, 74, 0.07);
-
-  --fl-rose:           #e11d48;
-  --fl-rose-bg:        rgba(225, 29, 72, 0.07);
-
-  --fl-text-primary:   #0f172a;
-  --fl-text-secondary: #475569;
-  --fl-text-muted:     #64748b;
-
-  --fl-input-bg:       #f8fafc;
-  --fl-input-border:   rgba(0, 0, 0, 0.1);
-  --fl-input-focus:    rgba(22, 163, 74, 0.15);
-
-  --fl-font-display:   'Bebas Neue', sans-serif;
-  --fl-font:           'Plus Jakarta Sans', sans-serif;
-
-  --fl-radius-sm:      10px;
-  --fl-radius-md:      16px;
-  --fl-radius-lg:      20px;
-  --fl-radius-xl:      26px;
-
-  --fl-shadow:
-    0 1px 0 rgba(255,255,255,0.8) inset,
-    0 4px 16px rgba(0,0,0,0.06),
-    0 1px 4px rgba(0,0,0,0.04);
-
-  --fl-shadow-btn:     0 4px 16px rgba(22,163,74,0.25);
-
-  --fl-transition:     0.22s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ══════════════════════════════════════
-   DARK MODE TOKENS
-══════════════════════════════════════ */
-html.dark {
-  --fl-bg:             #080b0f;
-  --fl-surface:        #111820;
-  --fl-surface-2:      #161e28;
-  --fl-border:         rgba(255, 255, 255, 0.06);
-  --fl-border-accent:  rgba(74, 222, 128, 0.25);
-
-  --fl-accent:         #4ade80;
-  --fl-accent-bright:  #34d399;
-  --fl-accent-glow:    rgba(74, 222, 128, 0.2);
-  --fl-accent-bg:      rgba(74, 222, 128, 0.07);
-
-  --fl-rose:           #fb7185;
-  --fl-rose-bg:        rgba(251, 113, 133, 0.07);
-
-  --fl-text-primary:   #f1f5f9;
-  --fl-text-secondary: #7d8fa3;
-  --fl-text-muted:     #3d4f63;
-
-  --fl-input-bg:       #0d1117;
-  --fl-input-border:   rgba(255, 255, 255, 0.08);
-  --fl-input-focus:    rgba(74, 222, 128, 0.15);
-
-  --fl-shadow:
-    0 1px 0 rgba(255,255,255,0.04) inset,
-    0 8px 32px rgba(0,0,0,0.4),
-    0 2px 8px rgba(0,0,0,0.3);
-
-  --fl-shadow-btn:     0 4px 20px rgba(74,222,128,0.25);
-}
-
-/* ══════════════════════════════════════
-   KEYFRAMES
-══════════════════════════════════════ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -103,37 +17,34 @@ html.dark {
   100% { background-position:  300% center; }
 }
 
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    PAGE SHELL
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 .food-page {
   min-height: 100vh;
-  background: var(--fl-bg);
-  font-family: var(--fl-font);
-  color: var(--fl-text-primary);
-  padding: 32px 28px 48px;
-  transition: background var(--fl-transition), color var(--fl-transition);
+  background: var(--bg);
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  padding: 36px 36px 72px;
+  transition: background var(--transition-slow), color 0.3s;
 }
 
-/* ══════════════════════════════════════
-   CARD BASE — override generic Card component
-══════════════════════════════════════ */
-.food-page .card,
-.food-page [class*="card"],
-.food-page [class*="Card"] {
-  background: var(--fl-surface) !important;
-  border: 1px solid var(--fl-border) !important;
-  border-radius: var(--fl-radius-xl) !important;
-  box-shadow: var(--fl-shadow) !important;
-  transition: background var(--fl-transition), border-color var(--fl-transition) !important;
-  padding: 24px 26px !important;
+/* Override Card component inside food-page */
+.food-page .rounded-\[24px\] {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: background var(--transition-slow), border-color var(--transition-slow) !important;
 }
 
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    HEADER
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 .food-header {
-  margin-bottom: 32px;
+  margin-bottom: 28px;
   animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
 }
 
@@ -145,66 +56,71 @@ html.dark {
 }
 
 .food-title {
-  font-family: var(--fl-font);
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 2.8vw, 2.3rem);
   font-weight: 800;
-  letter-spacing: -0.035em;
-  color: var(--fl-text-primary);
-  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  line-height: 1.15;
   margin-bottom: 6px;
-  transition: color var(--fl-transition);
+  transition: color var(--transition-slow);
 }
 
 .food-subtitle {
-  font-size: 0.85rem;
+  font-size: 13px;
   font-weight: 400;
-  color: var(--fl-text-secondary);
-  transition: color var(--fl-transition);
+  color: var(--text-secondary);
+  transition: color var(--transition-slow);
 }
 
-/* ── Summary badge ── */
+/* Summary badge */
 .food-summary {
   text-align: right;
-  padding: 14px 20px;
-  border-radius: var(--fl-radius-md);
-  background: var(--fl-surface);
-  border: 1px solid var(--fl-border);
-  box-shadow: var(--fl-shadow);
+  padding: 14px 22px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
   flex-shrink: 0;
-  transition: background var(--fl-transition), border-color var(--fl-transition);
+  min-width: 130px;
+  transition: background var(--transition-slow), border-color var(--transition-slow);
 }
 
 .summary-label {
-  font-size: 0.6rem;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--fl-text-muted);
-  margin-bottom: 4px;
-  transition: color var(--fl-transition);
+  color: var(--text-muted);
+  margin-bottom: 3px;
+  transition: color var(--transition-slow);
 }
 
 .summary-value {
-  font-family: var(--fl-font-display);
-  font-size: 2rem;
+  font-family: var(--font-display);
+  font-size: 1.9rem;
   line-height: 1;
-  letter-spacing: 0.01em;
-  color: var(--fl-accent);
-  transition: color var(--fl-transition);
+  letter-spacing: -0.01em;
+  color: var(--accent-text);
+  transition: color var(--transition-slow);
 }
 
-/* ══════════════════════════════════════
+.dark .summary-value { color: var(--accent); }
+
+/* ════════════════════════════════════════════════════════════
    GRID
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 .food-grid {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    QUICK SECTION
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 .quick-section {
   display: flex;
   flex-direction: column;
@@ -213,60 +129,64 @@ html.dark {
 }
 
 .section-heading {
-  font-size: 0.75rem;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--fl-text-muted);
-  margin-bottom: 14px;
-  transition: color var(--fl-transition);
+  color: var(--text-muted);
+  margin-bottom: 2px;
+  transition: color var(--transition-slow);
 }
 
 .quick-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .quick-btn {
-  height: 42px;
+  height: 40px;
   padding: 0 18px;
-  border-radius: var(--fl-radius-sm);
-  border: 1px solid var(--fl-border);
-  background: var(--fl-surface-2);
-  color: var(--fl-text-secondary);
-  font-family: var(--fl-font);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.83rem;
+  font-size: 13px;
   cursor: pointer;
-  transition: background var(--fl-transition), border-color var(--fl-transition),
-              color var(--fl-transition), transform var(--fl-transition);
+  white-space: nowrap;
+  transition: background var(--transition), border-color var(--transition),
+              color var(--transition), transform var(--transition), box-shadow var(--transition);
 }
 
 .quick-btn:hover {
   transform: translateY(-2px);
-  border-color: var(--fl-border-accent);
-  color: var(--fl-text-primary);
-  background: var(--fl-accent-bg);
+  border-color: var(--border-accent);
+  color: var(--accent-text);
+  background: var(--accent-bg);
+  box-shadow: var(--shadow-sm);
 }
 
-/* ══════════════════════════════════════
+.dark .quick-btn:hover { color: var(--accent); }
+
+/* ════════════════════════════════════════════════════════════
    ACTION BUTTONS
-   (targeting the Button component wrapper)
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 .food-action-btn {
-  width: 100%;
-  height: 50px !important;
-  border-radius: var(--fl-radius-md) !important;
-  font-family: var(--fl-font) !important;
-  font-size: 0.88rem !important;
+  width: 100% !important;
+  height: 48px !important;
+  border-radius: var(--radius-md) !important;
+  font-family: var(--font-body) !important;
+  font-size: 13.5px !important;
   font-weight: 700 !important;
-  letter-spacing: -0.01em !important;
-  background: linear-gradient(135deg, var(--fl-accent-bright), var(--fl-accent)) !important;
+  letter-spacing: 0.01em !important;
+  background: linear-gradient(135deg, var(--accent), var(--teal)) !important;
   border: none !important;
   color: #fff !important;
-  box-shadow: var(--fl-shadow-btn) !important;
-  transition: transform var(--fl-transition), box-shadow var(--fl-transition) !important;
+  box-shadow: 0 4px 16px var(--accent-glow) !important;
+  transition: transform var(--transition), box-shadow var(--transition) !important;
   position: relative;
   overflow: hidden;
 }
@@ -288,66 +208,71 @@ html.dark {
 
 .food-action-btn:hover {
   transform: translateY(-2px) !important;
-  box-shadow: 0 8px 28px var(--fl-accent-glow) !important;
+  box-shadow: 0 8px 28px var(--accent-glow) !important;
 }
 
 .food-action-btn.secondary {
-  background: var(--fl-surface-2) !important;
-  color: var(--fl-text-secondary) !important;
-  box-shadow: var(--fl-shadow) !important;
-  border: 1px solid var(--fl-border) !important;
+  background: var(--surface-2) !important;
+  color: var(--text-secondary) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border: 1px solid var(--border) !important;
 }
 
 .food-action-btn.secondary:hover {
-  color: var(--fl-text-primary) !important;
-  border-color: var(--fl-border-accent) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-strong) !important;
+  background: var(--surface-3) !important;
 }
 
 .btn-icon {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
 }
 
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    FORM CARD
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 .food-form-card {
-  border-color: var(--fl-border-accent) !important;
+  border-color: var(--border-accent) !important;
   animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
 }
 
 .form-title {
-  font-family: var(--fl-font);
-  font-size: 1.1rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: var(--fl-text-primary);
-  margin-bottom: 22px;
-  transition: color var(--fl-transition);
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  transition: color var(--transition-slow);
 }
 
 .food-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 /* ── Field groups ── */
 .field-group {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
 }
 
 .field-label {
-  font-size: 0.62rem;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--fl-text-muted);
-  padding-left: 2px;
-  transition: color var(--fl-transition);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 1px;
+  transition: color var(--transition-slow);
 }
 
 .field-wrapper {
@@ -359,38 +284,35 @@ html.dark {
 .field-icon {
   position: absolute;
   left: 14px;
-  width: 16px;
-  height: 16px;
-  color: var(--fl-text-muted);
+  width: 15px;
+  height: 15px;
+  color: var(--text-muted);
   pointer-events: none;
   z-index: 2;
   flex-shrink: 0;
-  transition: color var(--fl-transition);
+  transition: color var(--transition);
 }
 
-/* Override Input/Select component internals */
-.food-input,
-.food-select {
-  width: 100%;
+.field-wrapper:focus-within .field-icon {
+  color: var(--accent);
 }
 
+/* Override Input/Select components */
 .food-input input,
 .food-select select,
-/* also catch generic wrappers the component may use */
 .food-input > *,
 .food-select > * {
   width: 100% !important;
-  padding: 12px 16px 12px 44px !important;
-  background: var(--fl-input-bg) !important;
-  border: 1px solid var(--fl-input-border) !important;
-  border-radius: var(--fl-radius-sm) !important;
-  color: var(--fl-text-primary) !important;
-  font-family: var(--fl-font) !important;
-  font-size: 0.88rem !important;
+  padding: 11px 16px 11px 44px !important;
+  background: var(--surface-2) !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-body) !important;
+  font-size: 13.5px !important;
   font-weight: 400 !important;
   outline: none !important;
-  transition: border-color var(--fl-transition), box-shadow var(--fl-transition),
-              background var(--fl-transition) !important;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition-slow) !important;
   -webkit-appearance: none;
   appearance: none;
   box-sizing: border-box !important;
@@ -398,49 +320,45 @@ html.dark {
 
 .food-input input::placeholder,
 .food-select select::placeholder {
-  color: var(--fl-text-muted) !important;
+  color: var(--text-faint) !important;
 }
 
 .food-input input:focus,
 .food-select select:focus {
-  border-color: var(--fl-accent) !important;
-  box-shadow: 0 0 0 3px var(--fl-input-focus) !important;
-}
-
-.field-wrapper:focus-within .field-icon {
-  color: var(--fl-accent);
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 4px var(--accent-glow) !important;
+  background: var(--surface) !important;
 }
 
 /* Form action row */
 .form-actions {
   display: flex;
   gap: 12px;
-  padding-top: 4px;
+  padding-top: 8px;
 }
 
 .form-actions .flex-1 {
   flex: 1;
 }
 
-/* Override Button component inside form */
 .form-actions button {
   width: 100%;
-  height: 46px;
-  border-radius: var(--fl-radius-sm) !important;
-  font-family: var(--fl-font) !important;
-  font-size: 0.85rem !important;
+  height: 44px;
+  border-radius: var(--radius-sm) !important;
+  font-family: var(--font-body) !important;
+  font-size: 13.5px !important;
   font-weight: 700 !important;
-  transition: transform var(--fl-transition), box-shadow var(--fl-transition),
-              background var(--fl-transition) !important;
+  transition: transform var(--transition), box-shadow var(--transition) !important;
 }
 
 .form-actions button:hover {
   transform: translateY(-1px);
 }
 
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    LOADING OVERLAY
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -448,104 +366,109 @@ html.dark {
   align-items: center;
   justify-content: center;
   z-index: 200;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(8px);
 }
 
 .loading-card {
-  padding: 30px 36px;
-  border-radius: var(--fl-radius-xl);
-  background: var(--fl-surface);
-  border: 1px solid var(--fl-border);
-  box-shadow: var(--fl-shadow);
+  padding: 28px 36px;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   min-width: 200px;
 }
 
 .loading-spinner {
-  width: 32px;
-  height: 32px;
-  color: var(--fl-accent);
+  width: 30px;
+  height: 30px;
+  color: var(--accent);
   animation: spin 0.9s linear infinite;
 }
 
 .loading-text {
-  font-size: 0.85rem;
+  font-size: 13px;
   font-weight: 500;
-  color: var(--fl-text-secondary);
+  color: var(--text-secondary);
+  transition: color var(--transition-slow);
 }
 
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    EMPTY STATE
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 .empty-food-card {
   animation: fadeUp 0.5s 0.1s cubic-bezier(0.16,1,0.3,1) both;
 }
 
 .empty-food-content {
   text-align: center;
-  padding: 40px 20px;
+  padding: 64px 32px;
 }
 
 .empty-food-icon {
-  width: 68px;
-  height: 68px;
-  border-radius: var(--fl-radius-lg);
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 20px;
-  background: var(--fl-accent-bg);
-  border: 1px solid var(--fl-border-accent);
+  margin: 0 auto 18px;
+  background: var(--accent-bg);
+  border: 1px solid var(--border-accent);
 }
 
 .empty-icon-svg {
-  width: 30px;
-  height: 30px;
-  color: var(--fl-accent);
+  width: 28px;
+  height: 28px;
+  color: var(--accent-text);
 }
 
+.dark .empty-icon-svg { color: var(--accent); }
+
 .empty-food-title {
-  font-family: var(--fl-font);
-  font-size: 1.15rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: -0.025em;
-  color: var(--fl-text-primary);
-  margin-bottom: 8px;
-  transition: color var(--fl-transition);
+  color: var(--text-primary);
+  margin-bottom: 7px;
+  transition: color var(--transition-slow);
 }
 
 .empty-food-subtitle {
-  font-size: 0.83rem;
+  font-size: 13px;
   font-weight: 400;
-  color: var(--fl-text-secondary);
-  line-height: 1.5;
-  transition: color var(--fl-transition);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  transition: color var(--transition-slow);
 }
 
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    MEAL GROUPS
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 .meal-groups {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .meal-card {
   overflow: hidden;
-  transition: border-color var(--fl-transition), transform var(--fl-transition);
+  transition: border-color var(--transition), transform var(--transition);
 }
 
 .meal-card:hover {
-  border-color: rgba(255,255,255,0.1) !important;
+  border-color: var(--border-strong) !important;
   transform: translateY(-1px);
 }
 
-/* ── Meal header ── */
+/* Meal header */
 .meal-header {
   display: flex;
   justify-content: space-between;
@@ -556,19 +479,18 @@ html.dark {
 .meal-left {
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 12px;
 }
 
-/* Icon badge — reuses mealColors classes from assets */
 .meal-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--fl-radius-sm);
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: transform var(--fl-transition);
+  transition: transform var(--transition);
 }
 
 .meal-card:hover .meal-icon {
@@ -576,42 +498,40 @@ html.dark {
 }
 
 .meal-icon-svg {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
 }
 
 .meal-title {
-  font-family: var(--fl-font);
-  font-size: 0.95rem;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--fl-text-primary);
+  color: var(--text-primary);
   text-transform: capitalize;
-  transition: color var(--fl-transition);
+  transition: color var(--transition-slow);
 }
 
 .meal-count {
-  font-size: 0.72rem;
+  font-size: 11px;
   font-weight: 400;
-  color: var(--fl-text-muted);
+  color: var(--text-muted);
   margin-top: 2px;
-  transition: color var(--fl-transition);
+  transition: color var(--transition-slow);
 }
 
 .meal-calories {
-  font-family: var(--fl-font-display);
-  font-size: 1.6rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
   line-height: 1;
-  letter-spacing: 0.01em;
-  color: var(--fl-text-primary);
-  transition: color var(--fl-transition);
+  color: var(--text-primary);
+  transition: color var(--transition-slow);
 }
 
-/* ── Food item list ── */
+/* Food item list */
 .food-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .food-item {
@@ -619,16 +539,15 @@ html.dark {
   justify-content: space-between;
   align-items: center;
   padding: 13px 16px;
-  border-radius: var(--fl-radius-md);
-  background: var(--fl-surface-2);
-  border: 1px solid var(--fl-border);
-  transition: border-color var(--fl-transition), transform var(--fl-transition),
-              background var(--fl-transition);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  transition: border-color var(--transition), transform var(--transition), background var(--transition-slow);
 }
 
 .food-item:hover {
-  transform: translateY(-1px);
-  border-color: var(--fl-border-accent);
+  transform: translateX(3px);
+  border-color: var(--border-accent);
 }
 
 .food-item-left {
@@ -637,23 +556,23 @@ html.dark {
 }
 
 .food-name {
-  font-size: 0.88rem;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: var(--fl-text-primary);
-  margin-bottom: 3px;
+  color: var(--text-primary);
+  margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: color var(--fl-transition);
+  transition: color var(--transition-slow);
 }
 
 .food-type {
-  font-size: 0.7rem;
+  font-size: 11px;
   font-weight: 400;
   text-transform: capitalize;
-  color: var(--fl-text-muted);
-  transition: color var(--fl-transition);
+  color: var(--text-muted);
+  transition: color var(--transition-slow);
 }
 
 .food-item-right {
@@ -664,114 +583,108 @@ html.dark {
 }
 
 .food-calories {
-  font-family: var(--fl-font-display);
-  font-size: 1.1rem;
-  letter-spacing: 0.01em;
-  color: var(--fl-text-primary);
-  transition: color var(--fl-transition);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text-primary);
+  transition: color var(--transition-slow);
 }
 
-/* ── Delete button ── */
+/* Delete button */
 .delete-food-btn {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border: 1px solid transparent;
-  border-radius: var(--fl-radius-sm);
+  border-radius: var(--radius-xs);
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background var(--fl-transition), border-color var(--fl-transition),
-              transform var(--fl-transition);
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
 }
 
 .delete-food-btn:hover {
-  background: var(--fl-rose-bg);
-  border-color: rgba(225, 29, 72, 0.15);
-  transform: scale(1.08);
+  background: var(--rose-bg);
+  border-color: var(--rose-border);
+  transform: scale(1.1);
 }
 
 .delete-food-icon {
-  width: 15px;
-  height: 15px;
-  color: var(--fl-rose);
+  width: 14px;
+  height: 14px;
+  color: var(--rose);
 }
 
-/* ── APPEND THESE TO THE BOTTOM OF FoodLog.css ── */
-
-/* Inline estimating indicator next to the Calories label */
+/* AI estimate indicators */
 .calories-estimating {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   margin-left: 8px;
-  font-size: 0.62rem;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.08em;
-  color: var(--fl-accent);
+  color: var(--accent-text);
   text-transform: none;
   vertical-align: middle;
 }
 
+.dark .calories-estimating { color: var(--accent); }
+
 .estimating-icon {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   animation: spin 1s linear infinite;
 }
 
-/* "AI estimate" badge shown after calories are filled */
 .calories-auto-badge {
   display: inline-flex;
   align-items: center;
   margin-left: 8px;
-  font-size: 0.58rem;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--fl-accent);
-  background: var(--fl-accent-bg);
-  border: 1px solid var(--fl-border-accent);
+  color: var(--accent-text);
+  background: var(--accent-bg);
+  border: 1px solid var(--border-accent);
   border-radius: 99px;
   padding: 2px 8px;
   vertical-align: middle;
 }
 
-/* Skeleton pulse shown while estimating */
+.dark .calories-auto-badge { color: var(--accent); }
+
+/* Skeleton shimmer */
 .food-input-skeleton {
   width: 100%;
-  height: 44px;
-  border-radius: var(--fl-radius-sm);
-  background: linear-gradient(
-    90deg,
-    var(--fl-surface-2) 25%,
-    var(--fl-surface) 50%,
-    var(--fl-surface-2) 75%
-  );
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
   background-size: 300% 100%;
   animation: shimmer 1.4s linear infinite;
-  border: 1px solid var(--fl-border);
+  border: 1px solid var(--border);
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════════════════════
    RESPONSIVE
-══════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
+
 @media (max-width: 768px) {
-  .food-page { padding: 20px 16px 40px; }
+  .food-page { padding: 24px 18px 56px; }
 
   .food-header-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
+    gap: 12px;
   }
 
-  .food-summary { width: 100%; text-align: left; }
+  .food-summary {
+    width: 100%;
+    text-align: left;
+  }
 
-  .food-title { font-size: 1.8rem; }
+  .food-title { font-size: 1.7rem; }
 
   .food-item {
     flex-direction: column;

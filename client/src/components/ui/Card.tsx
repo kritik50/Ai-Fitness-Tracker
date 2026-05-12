@@ -11,13 +11,11 @@ const Card = ({
 }) => {
     return (
         <div
-            className={`rounded-[24px] p-5 sm:p-6 transition-all duration-300 ${className}`}
+            className={`rounded-[22px] p-5 sm:p-6 transition-all duration-300 ${className}`}
             style={{
-                background: 'linear-gradient(180deg, var(--surface-card-strong), var(--surface-card))',
-                border: '1px solid var(--surface-card-border)',
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
                 boxShadow: 'var(--shadow-card)',
-                backdropFilter: 'blur(18px) saturate(1.18)',
-                WebkitBackdropFilter: 'blur(18px) saturate(1.18)',
                 ...style,
             }}
         >
