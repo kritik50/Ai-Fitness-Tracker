@@ -78,16 +78,24 @@ export const AppProvider = ({children} : {children: React.ReactNode})=>{
                 return false;
             }
 
-            // Network error, timeout, or other — clear session and show Login
-            // Only toast if it's not a connection error (server might just be starting)
-            if (axios.isAxiosError(error) && error.code !== 'ECONNREFUSED' && error.code !== 'ERR_NETWORK') {
-                toast.error(getApiErrorMessage(error))
+            // Render free-tier cold start: backend takes ~15 s to wake up
+            // Show a friendly message instead of a cryptic error
+            if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+                toast.error('Server is waking up — please try again in a few seconds.', { duration: 5000 });
+                return false;
             }
+
+            // Network error or other — clear session silently (server might be starting)
+            if (axios.isAxiosError(error) && (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK')) {
+                return false;
+            }
+
             return false;
         } finally {
             setIsUserFetched(true);
         }
     }, [clearSession])
+
 
 
     const fetchFoodLogs = useCallback(async (token: string)=>{
